@@ -39,10 +39,15 @@ module.exports = {
       provider: () => rinkebyProvider
     }
   },
-  solc: {
-    optimizer: {
-      enabled: true,
-      runs: 500
+  compilers: {
+    solc: {
+      version: "^0.5.0",
+      settings: {
+        optimizer: {
+          enabled: true,
+          runs: 500
+        }
+      }
     }
   },
   mocha: {

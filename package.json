@@ -11,11 +11,12 @@
   "scripts": {
     "ganache": "ganache-cli -e 300 -p 9545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
     "stop": "sudo kill `sudo lsof -t -i:9545`",
-    "test": "npm run ganache sleep 5 && npm run lint ./ && npm run solium && truffle test && npm run stop",
+    "test": "npm run ganache sleep 5 && npm run lint && npm run solium && truffle test && npm run stop",
     "test:gas-reporter": "GAS_REPORTER=true npm run test",
     "test-ci": "GAS_REPORTER=true npm run ganache sleep 5 && npm run lint ./ && npm run solium && truffle test",
     "coverage": "./node_modules/.bin/solidity-coverage",
     "lint": "eslint ./test",
+    "lint:verbose": "DEBUG=eslint:* eslint ./test",
     "lint:fix": "eslint ./ --fix",
     "solium": "solium -d contracts/",
     "solium:fix": "solium -d contracts/ --fix",
@@ -64,11 +65,5 @@
     "prettier": "^1.17.1",
     "solidity-coverage": "0.5.11",
     "solium": "1.2.4"
-  },
-  "browserslist": [
-    "last 1 version",
-    "> 1%",
-    "maintained node versions",
-    "not dead"
-  ]
+  }
 }

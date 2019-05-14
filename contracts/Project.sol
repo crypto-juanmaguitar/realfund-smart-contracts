@@ -1,7 +1,8 @@
 pragma solidity >=0.4.21 <0.6.0;
 
 // Importing OpenZeppelin's SafeMath Implementation
-import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+
 
 contract Project {
     using SafeMath for uint256;
@@ -75,7 +76,7 @@ contract Project {
         if (currentBalance >= amountGoal) {
             state = State.Successful;
             payOut();
-        } else if (now > raiseBy)  {
+        } else if (now > raiseBy) {
             state = State.Expired;
         }
         completeAt = now;
@@ -128,7 +129,8 @@ contract Project {
         State currentState,
         uint256 currentAmount,
         uint256 goalAmount
-    ) {
+    ) 
+    {
         projectStarter = creator;
         projectTitle = title;
         projectDesc = description;

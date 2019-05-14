@@ -4,8 +4,9 @@ pragma solidity >=0.4.21 <0.6.0;
 // Importing OpenZeppelin's SafeMath Implementation
 // import 'https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/math/SafeMath.sol';
 
-import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
-import './Project.sol';
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "./Project.sol";
+
 
 contract Crowdfunding {
     using SafeMath for uint256;
@@ -34,7 +35,9 @@ contract Crowdfunding {
         string calldata description,
         uint durationInDays,
         uint amountToRaise
-    ) external {
+    ) 
+        external 
+    {
         uint raiseUntil = now.add(durationInDays.mul(1 days));
         Project newProject = new Project(msg.sender, title, description, raiseUntil, amountToRaise);
         projects.push(newProject);
@@ -51,7 +54,7 @@ contract Crowdfunding {
     /** @dev Function to get all projects' contract addresses.
       * @return A list of all projects' contract addreses
       */
-    function returnAllProjects() external view returns(Project[] memory){
+    function returnAllProjects() external view returns(Project[] memory) {
         return projects;
     }
 }
