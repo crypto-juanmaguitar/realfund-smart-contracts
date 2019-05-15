@@ -1,4 +1,5 @@
-pragma solidity >=0.4.21 <0.6.0;
+pragma solidity ^0.5.8;
+//pragma solidity >=0.4.21 <0.6.0;
 
 /* solium-disable mixedcase */
 contract Migrations {

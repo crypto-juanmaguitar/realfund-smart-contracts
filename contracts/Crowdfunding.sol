@@ -1,4 +1,5 @@
-pragma solidity >=0.4.21 <0.6.0;
+pragma solidity ^0.5.8;
+// pragma solidity >=0.4.21 <0.6.0;
 // pragma solidity 0.5.4;
 
 // Importing OpenZeppelin's SafeMath Implementation
@@ -31,17 +32,17 @@ contract Crowdfunding {
       * @param amountToRaise Project goal in wei
       */
     function startProject(
-        string calldata title,
-        string calldata description,
+        string memory title,
+        string memory description,
         uint durationInDays,
         uint amountToRaise
     ) 
-        external 
+        public 
     {
         uint raiseUntil = now.add(durationInDays.mul(1 days));
         Project newProject = new Project(msg.sender, title, description, raiseUntil, amountToRaise);
         projects.push(newProject);
-        emit ProjectStarted(
+        emit ProjectStarted (
             address(newProject),
             msg.sender,
             title,
