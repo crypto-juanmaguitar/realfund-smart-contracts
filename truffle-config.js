@@ -1,19 +1,15 @@
 require('dotenv').config()
+
+const INFURA_API_KEY = process.env.INFURA_API_KEY
+const MNEMONIC = process.env.MNEMONIC
 const HDWalletProvider = require('truffle-hdwallet-provider')
 
-const rinkebyWallet =
-  'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'
-const rinkebyProvider = new HDWalletProvider(
-  rinkebyWallet,
-  'https://rinkeby.infura.io/'
-)
-
-const ropstenWallet =
-  'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'
-const ropstenProvider = new HDWalletProvider(
-  ropstenWallet,
-  'https://ropsten.infura.io/'
-)
+const NETWORK_IDS = {
+  // mainnet: 1,
+  ropsten: 2,
+  rinkeby: 4,
+  kovan: 42
+}
 
 module.exports = {
   migrations_directory: './migrations',
@@ -25,23 +21,11 @@ module.exports = {
       gas: 6.5e6,
       gasPrice: 5e9,
       websockets: true
-    },
-    ropsten: {
-      network_id: 3,
-      gas: 6.5e6,
-      gasPrice: 5e9,
-      provider: () => ropstenProvider
-    },
-    rinkeby: {
-      network_id: 4,
-      gas: 6.5e6,
-      gasPrice: 5e9,
-      provider: () => rinkebyProvider
     }
   },
   compilers: {
     solc: {
-      version: "^0.5.0",
+      version: '^0.5.0',
       settings: {
         optimizer: {
           enabled: true,
@@ -59,3 +43,29 @@ module.exports = {
     }
   }
 }
+
+for (const networkName in NETWORK_IDS) {
+  module.exports.networks[networkName] = {
+    provider: new HDWalletProvider(
+      MNEMONIC,
+      'https://' + networkName + '.infura.io/' + INFURA_API_KEY
+    ),
+    network_id: NETWORK_IDS[networkName]
+  }
+}
+
+// const HDWalletProvider = require('truffle-hdwallet-provider')
+
+// const rinkebyWallet =
+//   'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'
+// const rinkebyProvider = new HDWalletProvider(
+//   rinkebyWallet,
+//   'https://rinkeby.infura.io/'
+// )
+
+// const ropstenWallet =
+//   'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'
+// const ropstenProvider = new HDWalletProvider(
+//   ropstenWallet,
+//   'https://ropsten.infura.io/'
+// )
