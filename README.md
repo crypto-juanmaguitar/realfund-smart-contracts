@@ -10,6 +10,8 @@
 [![CircleCI](https://circleci.com/gh/realfundtokens/smart-contracts.svg?style=svg)](https://circleci.com/gh/realfundtokens/smart-contracts)
 -->
 
+[![RealFund](./img/realfund-rocks.png)](http://realfund.rocks/)
+
 Smart Contracts for [**RealFund**](http://realfund.rocks/)
 
 ### Show some :heart:
