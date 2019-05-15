@@ -1,24 +1,33 @@
-# Smart Contract Starter 
+# Smart Contracts RealFund
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ravidsrk/smart-contract-starter/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/ravidsrk/smart-contract-starter.svg?branch=master)](https://travis-ci.org/ravidsrk/smart-contract-starter) 
-[![Coverage Status](https://coveralls.io/repos/github/ravidsrk/smart-contract-starter/badge.svg?branch=master)](https://coveralls.io/github/ravidsrk/smart-contract-starter?branch=master) 
-[![CircleCI](https://circleci.com/gh/ravidsrk/smart-contract-starter.svg?style=svg)](https://circleci.com/gh/ravidsrk/smart-contract-starter)
+<!--
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/realfundtokens/smart-contracts/blob/master/LICENSE)
+-->
+[![Build Status](https://travis-ci.org/realfundtokens/smart-contracts.svg?branch=master)](https://travis-ci.org/realfundtokens/smart-contracts)
 
-Boilerplate for your next Smart Contract, made simple.
+<!-- 
+[![Coverage Status](https://coveralls.io/repos/github/realfundtokens/smart-contracts/badge.svg?branch=master)](https://coveralls.io/github/realfundtokens/smart-contracts?branch=master) 
+[![CircleCI](https://circleci.com/gh/realfundtokens/smart-contracts.svg?style=svg)](https://circleci.com/gh/realfundtokens/smart-contracts)
+-->
+
+Smart Contracts for [**RealFund**](https://realfund.rocks/)
 
 ### Show some :heart:
-[![GitHub stars](https://img.shields.io/github/stars/ravidsrk/smart-contract-starter.svg?style=social&label=Star)](https://github.com/ravidsrk/smart-contract-starter) [![GitHub forks](https://img.shields.io/github/forks/ravidsrk/smart-contract-starter.svg?style=social&label=Fork)](https://github.com/ravidsrk/smart-contract-starter/fork) [![GitHub watchers](https://img.shields.io/github/watchers/ravidsrk/smart-contract-starter.svg?style=social&label=Watch)](https://github.com/ravidsrk/smart-contract-starter) [![GitHub followers](https://img.shields.io/github/followers/ravidsrk.svg?style=social&label=Follow)](https://github.com/ravidsrk/smart-contract-starter)
-[![Twitter Follow](https://img.shields.io/twitter/follow/ravidsrk.svg?style=social)](https://twitter.com/ravidsrk)
+[![GitHub stars](https://img.shields.io/github/stars/realfundtokens/smart-contracts.svg?style=social&label=Star)](https://github.com/realfundtokens/smart-contracts) [![GitHub forks](https://img.shields.io/github/forks/realfundtokens/smart-contracts.svg?style=social&label=Fork)](https://github.com/realfundtokens/smart-contracts/fork) [![GitHub watchers](https://img.shields.io/github/watchers/realfundtokens/smart-contracts.svg?style=social&label=Watch)](https://github.com/realfundtokens/smart-contracts) [![GitHub followers](https://img.shields.io/github/followers/realfundtokens.svg?style=social&label=Follow)](https://github.com/realfundtokens/smart-contracts)
+[![Twitter Follow](https://img.shields.io/twitter/follow/realfundtokens.svg?style=social)](https://twitter.com/realfundtokens)
 
 ## This project uses:
 - [Truffle v5](https://truffleframework.com/)
 - [Ganache](https://truffleframework.com/ganache)
 - [Solium](https://github.com/duaraghav8/Solium)
 - [OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-solidity)
-- [Travis CI](https://travis-ci.org/ravidsrk/smart-contract-starter) and [Circle CI](https://circleci.com/gh/ravidsrk/smart-contract-starter)
-- [Coveralls](https://coveralls.io/github/ravidsrk/smart-contract-starter?branch=master)
+- [Travis CI](https://travis-ci.org/realfundtokens/smart-contracts)
+<!--
 
+- [Coveralls](https://coveralls.io/github/realfundtokens/smart-contracts?branch=master)
+-->
+
+<!--
 ## Installation
 
 1. Install Truffle and Ganache CLI globally.
@@ -42,16 +51,17 @@ Run solidity-coverage:              npm run coverage
 Run lint, solium, and truffle test: npm run test
 ```
 
+-->
+
 ### Created & Maintained By
-[Ravindra Kumar](https://github.com/ravidsrk) ([@ravidsrk](https://www.twitter.com/ravidsrk))
+[JuanMa Garrido](https://github.com/juanmaguitar) ([@juanmaguitar](https://www.twitter.com/juanmaguitar))
 
-> If you found this repo helpful or you learned something from the source code and want to thank me, consider [buying me a cup of](https://www.paypal.me/ravidsrk) :coffee:
-
+<!--
 ## License
 ```
 MIT License
 
-Copyright (c) 2018 Ravindra Kumar <ravidsrk@gmail.com>
+Copyright (c) 2018 Ravindra Kumar <realfundtokens@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -71,3 +81,4 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+-->
