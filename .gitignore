@@ -102,5 +102,7 @@ package-lock.json
 
 
 # End of https://www.gitignore.io/api/solidity,soliditytruffle
-
 test-results/
+
+# Coveralls config file
+.coveralls.yml

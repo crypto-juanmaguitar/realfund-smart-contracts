@@ -8,6 +8,10 @@
   "directories": {
     "test": "test"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/realfundtokens/smart-contracts"
+  },
   "scripts": {
     "ganache": "ganache-cli -e 300 -p 9545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
     "stop": "sudo kill `sudo lsof -t -i:9545`",
