@@ -1,4 +1,4 @@
-# Smart Contracts RealFund
+# RealFund Smart Contracts
 
 <!--
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/realfundtokens/smart-contracts/blob/master/LICENSE)
@@ -13,7 +13,7 @@
 Smart Contracts for [**RealFund**](https://realfund.rocks/)
 
 ### Show some :heart:
-[![GitHub stars](https://img.shields.io/github/stars/realfundtokens/smart-contracts.svg?style=social&label=Star)](https://github.com/realfundtokens/smart-contracts) [![GitHub forks](https://img.shields.io/github/forks/realfundtokens/smart-contracts.svg?style=social&label=Fork)](https://github.com/realfundtokens/smart-contracts/fork) [![GitHub watchers](https://img.shields.io/github/watchers/realfundtokens/smart-contracts.svg?style=social&label=Watch)](https://github.com/realfundtokens/smart-contracts) [![GitHub followers](https://img.shields.io/github/followers/realfundtokens.svg?style=social&label=Follow)](https://github.com/realfundtokens/smart-contracts)
+[![GitHub stars](https://img.shields.io/github/stars/realfundtokens/smart-contracts.svg?style=social&label=Star)](https://github.com/realfundtokens/smart-contracts) [![GitHub watchers](https://img.shields.io/github/watchers/realfundtokens/smart-contracts.svg?style=social&label=Watch)](https://github.com/realfundtokens/smart-contracts) [![GitHub followers](https://img.shields.io/github/followers/realfundtokens.svg?style=social&label=Follow)](https://github.com/realfundtokens/smart-contracts)
 [![Twitter Follow](https://img.shields.io/twitter/follow/realfundtokens.svg?style=social)](https://twitter.com/realfundtokens)
 
 ## This project uses:
