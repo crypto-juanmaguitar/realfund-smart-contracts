@@ -10,7 +10,7 @@
 [![CircleCI](https://circleci.com/gh/realfundtokens/smart-contracts.svg?style=svg)](https://circleci.com/gh/realfundtokens/smart-contracts)
 -->
 
-Smart Contracts for [**RealFund**](https://realfund.rocks/)
+Smart Contracts for [**RealFund**](http://realfund.rocks/)
 
 ### Show some :heart:
 [![GitHub stars](https://img.shields.io/github/stars/realfundtokens/smart-contracts.svg?style=social&label=Star)](https://github.com/realfundtokens/smart-contracts) [![GitHub watchers](https://img.shields.io/github/watchers/realfundtokens/smart-contracts.svg?style=social&label=Watch)](https://github.com/realfundtokens/smart-contracts) [![GitHub followers](https://img.shields.io/github/followers/realfundtokens.svg?style=social&label=Follow)](https://github.com/realfundtokens/smart-contracts)
