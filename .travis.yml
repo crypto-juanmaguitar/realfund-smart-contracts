@@ -31,4 +31,4 @@ deploy:
     on:
       all_branches: true
       tags: true
-      repo: realfundtokens/smart-contracts
+      repo: realfundtokens/realfund-smart-contracts
