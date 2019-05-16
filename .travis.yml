@@ -18,9 +18,7 @@ script:
 - truffle test
 - npm run stop
 after_success:
-  - npm run build #make a dist folder
-before_deploy:
-  - cd build
+  - npm run build #make a build folder
 deploy:
 #  - provider: script
 #    skip_cleanup: true
