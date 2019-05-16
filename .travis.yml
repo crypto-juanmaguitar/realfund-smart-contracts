@@ -18,14 +18,14 @@ script:
 - truffle test
 - npm run stop
 deploy:
-- provider: script
+  - provider: script
     skip_cleanup: true
     script: ./deploy.sh
     on:
       all_branches: true
       tags: true
       repo: realfundtokens/smart-contracts
-- provider: npm
+  - provider: npm
     email: juanma.garrido@gmail.com
     api_key: $NPM_KEY
     on:
