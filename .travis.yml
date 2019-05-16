@@ -14,10 +14,13 @@ script:
 - npm run solium
 - npm run ganache
 - sleep 5
-- npm run build
 - truffle migrate --network test
 - truffle test
 - npm run stop
+after_success:
+  - npm run build #make a dist folder
+before_deploy:
+  - cd build
 deploy:
 #  - provider: script
 #    skip_cleanup: true
