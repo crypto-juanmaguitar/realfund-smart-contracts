@@ -17,8 +17,6 @@ script:
 - truffle migrate --network test
 - truffle test
 - npm run stop
-after_success:
-  - npm run build #make a build folder
 deploy:
 #  - provider: script
 #    skip_cleanup: true
