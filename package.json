@@ -1,5 +1,5 @@
 {
-  "name": "smart-contracts",
+  "name": "realfund-smart-contracts",
   "description": "Smart Contracts for RealFund",
   "version": "0.0.5",
   "author": "JuanMa Garrido <juanma.garrido@gmail.com>",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/realfundtokens/smart-contracts"
+    "url": "https://github.com/realfundtokens/realfund-smart-contracts"
   },
   "scripts": {
     "ganache": "ganache-cli -e 300 -p 9545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
