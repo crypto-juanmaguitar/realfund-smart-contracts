@@ -83,6 +83,7 @@ node_modules
 # testing
 
 # production
+build
 build_webpack
 
 # misc
