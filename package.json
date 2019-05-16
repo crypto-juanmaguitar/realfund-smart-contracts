@@ -27,7 +27,8 @@
     "clean:contracts": "rimraf build/contracts",
     "build": "npm run clean:contracts && truffle compile",
     "migrate:kovan": "truffle migrate --network kovan",
-    "upgrade": "npm version patch && git add -A && git commit -m 'new version' && git push && git push --tags"
+    "upgrade": "npm version patch",
+    "upgrade:push": "git push && git push --tags"
   },
   "files": [
     "build/"
