@@ -1,7 +1,7 @@
 {
   "name": "smart-contracts",
   "description": "Smart Contracts for RealFund",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "JuanMa Garrido <juanma.garrido@gmail.com>",
   "license": "MIT",
   "main": "truffle.js",
@@ -27,7 +27,7 @@
     "clean:contracts": "rimraf build/contracts",
     "build": "npm run clean:contracts && truffle compile",
     "migrate:kovan": "truffle migrate --network kovan",
-    "upgrade" : "npm version patch"
+    "upgrade": "npm version patch"
   },
   "files": [
     "build/"
