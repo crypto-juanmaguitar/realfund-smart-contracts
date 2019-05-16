@@ -26,6 +26,7 @@ deploy:
 #      tags: true
 #      repo: realfundtokens/smart-contracts
   - provider: npm
+    skip_cleanup: true
     email: juanma.garrido@gmail.com
     api_key: $NPM_KEY
     on:
