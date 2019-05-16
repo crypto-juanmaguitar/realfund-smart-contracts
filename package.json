@@ -30,9 +30,6 @@
     "upgrade": "npm version patch",
     "upgrade:push": "git push && git push --tags"
   },
-  "files": [
-    "build/"
-  ],
   "dependencies": {
     "bn.js": "^4.11.8",
     "dotenv": "^7.0.0",
