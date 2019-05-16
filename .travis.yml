@@ -1,21 +1,34 @@
 sudo: required
 language: node_js
 node_js:
-  - "9"
+- '9'
 cache:
   directories:
   - node_modules
 install:
-  - npm install -g truffle@beta
-  - npm install -g ganache-cli
-  - npm install
+- npm install -g truffle@beta
+- npm install -g ganache-cli
+- npm install
 script:
-  - npm run lint
-  - npm run solium
-  - npm run ganache
-  - sleep 5
-  - truffle migrate --network test
-  - truffle test
-  - npm run stop
-#after_script:
-#  - npm run coverage && cat coverage/lcov.info | coveralls
+- npm run lint
+- npm run solium
+- npm run ganache
+- sleep 5
+- truffle migrate --network test
+- truffle test
+- npm run stop
+deploy:
+- provider: script
+    skip_cleanup: true
+    script: ./deploy.sh
+    on:
+      all_branches: true
+      tags: true
+      repo: realfundtokens/smart-contracts
+- provider: npm
+    email: juanma.garrido@gmail.com
+    api_key: $NPM_KEY
+    on:
+      all_branches: true
+      tags: true
+      repo: realfundtokens/smart-contracts

@@ -1,10 +1,10 @@
 {
-  "name": "smart-contract-starter",
-  "description": "Boilerplate for your next Smart Contract, made simple.",
+  "name": "smart-contracts",
+  "description": "Smart Contracts for RealFund",
   "version": "0.0.1",
-  "author": "Ravindra Kumar <ravidsrk@gmail.com>",
+  "author": "JuanMa Garrido <juanma.garrido@gmail.com>",
   "license": "MIT",
-  "main": "truffle-config.js",
+  "main": "truffle.js",
   "directories": {
     "test": "test"
   },
@@ -26,7 +26,8 @@
     "solium:fix": "solium -d contracts/ --fix",
     "clean:contracts": "rimraf build/contracts",
     "build": "npm run clean:contracts && truffle compile",
-    "migrate:kovan": "truffle migrate --network kovan"
+    "migrate:kovan": "truffle migrate --network kovan",
+    "upgrade" : "npm version patch"
   },
   "files": [
     "build/"
