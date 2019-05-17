@@ -38,7 +38,7 @@ contract Crowdfunding {
     ) 
         public 
     {
-        uint raiseUntil = now.add(durationInDays.mul(1 days));
+        uint raiseUntil = now.add(durationInDays.mul(1 days)); // solium-disable-line security/no-block-members
         Project newProject = new Project(msg.sender, title, description, raiseUntil, amountToRaise);
         projects.push(newProject);
         emit ProjectStarted (
