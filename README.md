@@ -5,7 +5,7 @@
 -->
 
 [![Build Status](https://travis-ci.org/realfundtokens/smart-contracts.svg?branch=master)](https://travis-ci.org/realfundtokens/smart-contracts)
-
+[![npm version](https://badge.fury.io/js/realfund-smart-contracts.svg)](https://badge.fury.io/js/realfund-smart-contracts)
 <!-- 
 [![Coverage Status](https://coveralls.io/repos/github/realfundtokens/smart-contracts/badge.svg?branch=master)](https://coveralls.io/github/realfundtokens/smart-contracts?branch=master) 
 [![CircleCI](https://circleci.com/gh/realfundtokens/smart-contracts.svg?style=svg)](https://circleci.com/gh/realfundtokens/smart-contracts)

@@ -1,31 +1,35 @@
 const Crowdfunding = artifacts.require('Crowdfunding')
 
-contract('Crowdfunding', function() {
+contract('Crowdfunding', () => {
   let crowdfunding
 
-  before(async () => {
-    crowdfunding = await Crowdfunding.deployed() //deploy contract
+  beforeEach(async () => {
+    crowdfunding = await Crowdfunding.new()
   })
 
-  it('should assert true', async done => {
-    assert.isTrue(true)
-    done()
+  afterEach(async () => {
+    crowdfunding = null
   })
 
   describe('should be able to create projects', () => {
-    // it("being each one an instance of Project", async () => {
-    //   const title = 'test project title'
-    //   const description = 'test project description'
-    //   const durationInDays = 4
-    //   const amountToRaise = 100
+    it(`triggering a 'ProjectStarted' event`, async () => {
+      const title = 'test project title'
+      const description = 'test project description'
+      const durationInDays = 4
+      const amountToRaise = 100
 
-    //   await crowdfunding.startProject(title, description, durationInDays, amountToRaise)
+      const result = await crowdfunding.startProject(
+        title,
+        description,
+        durationInDays,
+        amountToRaise
+      )
 
-    //   const projects = await crowdfunding.returnAllProjects()
-    //   console.log(projects)
-    //   console.log(project[0])
-    //   assert.equal(projectsAfter.length, 1)
-    // });
+      assert.equal(result.logs[0].event, 'ProjectStarted')
+      assert.equal(result.logs[0].args.projectTitle, title)
+      assert.equal(result.logs[0].args.projectDesc, description)
+      assert.equal(result.logs[0].args.goalAmount, amountToRaise)
+    })
 
     it('adding them to a list', async () => {
       const title = 'test project title'

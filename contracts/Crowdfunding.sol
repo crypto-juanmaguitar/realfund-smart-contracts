@@ -12,8 +12,7 @@ import "./Project.sol";
 contract Crowdfunding {
     using SafeMath for uint256;
 
-    // List of existing projects
-    Project[] private projects;
+    Project[] private projects; // List of existing projects
 
     // Event that will be emitted whenever a new project is started
     event ProjectStarted(
@@ -58,4 +57,5 @@ contract Crowdfunding {
     function returnAllProjects() external view returns(Project[] memory) {
         return projects;
     }
+
 }
