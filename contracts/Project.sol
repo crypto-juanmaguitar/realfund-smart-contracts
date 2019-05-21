@@ -8,38 +8,63 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 contract Project {
     using SafeMath for uint256;
     
-    // Data structures
+    /** DATA STRUCTURES */
+
     enum State {
         Fundraising,
         Expired,
         Successful
     }
 
-    // State variables
+    /** STATE VARIABLES */
+
+    /// project creator
     address payable public creator;
-    uint public amountGoal; // required to reach at least this much, else everyone gets refund
-    uint public completeAt;
+
+    /// required to reach at least this much, else everyone gets refund
+    uint public amountGoal;
+    
+    /// date when the funding is completed
+    uint public closedAt;
+
+    /// current balance of the project
     uint256 public currentBalance;
+    
+    /// date when the funding should be completed or everyone gets refund
     uint public raiseBy;
+
+    /// title of the project
     string public title;
+    
+    /// @state description | description of the project
     string public description;
+
+    /// @state state | state of the project
     State public state = State.Fundraising; // initialize on create
+
+    /// @state contributions | maps that matches addresses and contributions
     mapping (address => uint) public contributions;
 
-    // Event that will be emitted whenever funding will be received
+    /** EVENTS */
+
+    /// Event that will be emitted whenever funding will be received
     event FundingReceived(address contributor, uint amount, uint currentTotal);
-    // Event that will be emitted whenever the project starter has received the funds
+    
+    /// Event that will be emitted whenever the project starter has received the funds
     event CreatorPaid(address recipient);
 
-    // Modifier to check current state
+
+    /** MODIFIERS */
+
+    /// if current state is the one passed as argument
     modifier inState(State _state) {
         require(state == _state);
         _;
     }
 
     // Modifier to check if the function caller is the project creator
-    modifier isCreator() {
-        require(msg.sender == creator);
+    modifier isNotCreator() {
+        require(msg.sender != creator);
         _;
     }
 
@@ -59,68 +84,49 @@ contract Project {
         currentBalance = 0;
     }
 
-    // address(this).balance 
-
-    /** @dev Function to fund a certain project.
-      */
-    function contribute() external inState(State.Fundraising) payable {
-        require(msg.sender != creator);
+    /// @dev Function to fund this project.
+    function contribute() external inState(State.Fundraising) isNotCreator payable {
         contributions[msg.sender] = contributions[msg.sender].add(msg.value);
-        currentBalance = currentBalance.add(msg.value);
-        emit FundingReceived(msg.sender, msg.value, currentBalance);
-        checkIfFundingCompleteOrExpired();
+        emit FundingReceived(msg.sender, msg.value, address(this).balance);
+        checkIfFundingCompleted();
     }
 
-    /** @dev Function to change the project state depending on conditions.
-      */
-    function checkIfFundingCompleteOrExpired() public {
-        if (currentBalance >= amountGoal) {
+    /// @dev Check if funding goal has been achieved and set state accordingly
+    function checkIfFundingCompleted() public {
+        if (address(this).balance >= amountGoal) {
             state = State.Successful;
+            closedAt = now;
             payOut();
-        } else if (now > raiseBy) {
+        }
+    }
+
+    /// @dev Check if project has run out of time and set state accordingly
+    function checkIfFundingExpired() public {
+        if (now > raiseBy) {
             state = State.Expired;
+            closedAt = now;
         }
-        completeAt = now;
     }
 
-    /** @dev Function to give the received funds to project starter.
-      */
-    function payOut() internal inState(State.Successful) returns (bool) {
-        uint256 totalRaised = currentBalance;
-        currentBalance = 0;
-
-        if (creator.send(totalRaised)) {
-            emit CreatorPaid(creator);
-            return true;
-        } else {
-            currentBalance = totalRaised;
-            state = State.Successful;
-        }
-
-        return false;
+    /// @dev Function to give the received funds to project starter.
+    function payOut() internal inState(State.Successful) {
+        creator.transfer(address(this).balance);
+        emit CreatorPaid(creator);
     }
 
-    /** @dev Function to retrieve donated amount when a project expires.
-      */
-    function getRefund() public inState(State.Expired) returns (bool) {
+    /// @dev Function to retrieve donated amount when a project expires.
+    function getRefund() public inState(State.Expired) {
         require(contributions[msg.sender] > 0);
 
         uint amountToRefund = contributions[msg.sender];
+        require(amountToRefund > 0);
         contributions[msg.sender] = 0;
 
-        if (!msg.sender.send(amountToRefund)) {
-            contributions[msg.sender] = amountToRefund;
-            return false;
-        } else {
-            currentBalance = currentBalance.sub(amountToRefund);
-        }
-
-        return true;
+        msg.sender.transfer(amountToRefund);
     }
-
-    /** @dev Function to get specific information about the project.
-      * @return Returns all the project's details
-      */
+   
+    /// @dev Function to get specific information about the project.
+    /// @return Returns all the project's details
     function getDetails() public view returns 
     (
         address payable projectStarter,

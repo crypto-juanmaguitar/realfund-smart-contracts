@@ -1,7 +1,12 @@
+/* eslint-disable */
 const Crowdfunding = artifacts.require('Crowdfunding')
 
-contract('Crowdfunding', () => {
+const FINNEY = 10**15;
+const DAY = 3600 * 24;
+
+contract('Crowdfunding', accounts => {
   let crowdfunding
+  const crowdfundingOwner = accounts[0]
 
   beforeEach(async () => {
     crowdfunding = await Crowdfunding.new()
@@ -15,13 +20,13 @@ contract('Crowdfunding', () => {
     it(`triggering a 'ProjectStarted' event`, async () => {
       const title = 'test project title'
       const description = 'test project description'
-      const durationInDays = 4
+      const durationInSeconds = 4 * DAY
       const amountToRaise = 100
 
       const result = await crowdfunding.startProject(
         title,
         description,
-        durationInDays,
+        durationInSeconds,
         amountToRaise
       )
 
@@ -29,6 +34,7 @@ contract('Crowdfunding', () => {
       assert.equal(result.logs[0].args.projectTitle, title)
       assert.equal(result.logs[0].args.projectDesc, description)
       assert.equal(result.logs[0].args.goalAmount, amountToRaise)
+      assert.equal(result.logs[0].args.projectStarter, crowdfundingOwner)
     })
 
     it('adding them to a list', async () => {

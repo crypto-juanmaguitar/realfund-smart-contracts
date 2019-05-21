@@ -1,5 +1,5 @@
-pragma solidity ^0.5.8;
-// pragma solidity >=0.4.21 <0.6.0;
+// pragma solidity ^0.5.8;
+pragma solidity >=0.4.21 <0.6.0;
 // pragma solidity 0.5.4;
 
 // Importing OpenZeppelin's SafeMath Implementation
@@ -9,9 +9,14 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "./Project.sol";
 
 
+/// @title Crowdfunding
+/// @author 
+/// @notice
+/// @dev
 contract Crowdfunding {
     using SafeMath for uint256;
 
+    /// @notice
     Project[] private projects; // List of existing projects
 
     // Event that will be emitted whenever a new project is started
@@ -25,31 +30,31 @@ contract Crowdfunding {
     );
 
     /** @dev Function to start a new project.
-      * @param title Title of the project to be created
-      * @param description Brief description about the project
-      * @param durationInDays Project deadline in days
-      * @param amountToRaise Project goal in wei
+      * @param _title Title of the project to be created
+      * @param _description Brief description about the project
+      * @param _duration Project deadline in seconds (to count from now)
+      * @param _amountToRaise Project goal in wei
       */
     function startProject(
-        string memory title,
-        string memory description,
-        uint durationInDays,
-        uint amountToRaise
+        string memory _title,
+        string memory _description,
+        uint _duration,
+        uint _amountToRaise
     ) 
         public 
     {
-        uint raiseUntil = now.add(durationInDays.mul(1 days)); // solium-disable-line security/no-block-members
-        Project newProject = new Project(msg.sender, title, description, raiseUntil, amountToRaise);
+        uint _raiseUntil = now + _duration; // solium-disable-line security/no-block-members
+        Project newProject = new Project(msg.sender, _title, _description, _raiseUntil, _amountToRaise);
         projects.push(newProject);
         emit ProjectStarted (
             address(newProject),
             msg.sender,
-            title,
-            description,
-            raiseUntil,
-            amountToRaise
+            _title,
+            _description,
+            _raiseUntil,
+            _amountToRaise
         );
-    }                                                                                                                                   
+    }                                                                                                                          
 
     /** @dev Function to get all projects' contract addresses.
       * @return A list of all projects' contract addreses
@@ -59,3 +64,4 @@ contract Crowdfunding {
     }
 
 }
+

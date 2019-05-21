@@ -16,6 +16,7 @@
     "url": "https://github.com/realfundtokens/realfund-smart-contracts"
   },
   "scripts": {
+    "phoenix": "rm -rf node_modules && rm -rf package-lock.json && npm cache clean --force && npm install && rm -rf node_modules/**/.git",
     "ganache": "ganache-cli -e 300 -p 9545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
     "stop": "sudo kill `sudo lsof -t -i:9545`",
     "test": "npm run ganache sleep 5 && npm run lint && npm run solium && truffle test && npm run stop",
@@ -31,7 +32,8 @@
     "build": "npm run clean:contracts && truffle compile",
     "migrate:kovan": "truffle migrate --network kovan",
     "upgrade": "npm version patch",
-    "upgrade:push": "git push && git push --tags"
+    "upgrade:push": "git push && git push --tags",
+    "docgen": "SOLC_PATH=/usr/local/bin/solc SOLC_ARGS='openzeppelin-solidity=`pwd`/node_modules/openzeppelin-solidity' node_modules/.bin/solidity-docgen . ./contracts ./docs" 
   },
   "dependencies": {
     "bn.js": "^4.11.8",
@@ -39,6 +41,7 @@
     "ethereumjs-wallet": "^0.6.3",
     "npm-check-updates": "^3.1.7",
     "openzeppelin-solidity": "^2.2.0",
+    "solidity-docgen": "^0.1.1",
     "truffle": "^5.0.12",
     "truffle-hdwallet-provider": "^1.0.6",
     "web3": "^1.0.0-beta.37",
