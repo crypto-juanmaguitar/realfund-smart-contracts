@@ -43,6 +43,7 @@ contract('Project', accounts => {
 
     assert.equal(projectTitle, title)
     assert.equal(projectDesc, description)
+    assert.equal(projectDesc, description)
   })
 
   // beforeEach(async () => {
