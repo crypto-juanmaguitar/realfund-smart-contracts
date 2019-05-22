@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/realfundtokens/smart-contracts/blob/master/LICENSE)
 -->
 
-[![Build Status](https://travis-ci.org/realfundtokens/smart-contracts.svg?branch=master)](https://travis-ci.org/realfundtokens/smart-contracts)
+[![Build Status](https://travis-ci.org/realfundtokens/realfund-smart-contracts.svg?branch=master)](https://travis-ci.org/realfundtokens/realfund-smart-contracts)
 [![npm version](https://badge.fury.io/js/realfund-smart-contracts.svg)](https://badge.fury.io/js/realfund-smart-contracts)
 <!-- 
 [![Coverage Status](https://coveralls.io/repos/github/realfundtokens/smart-contracts/badge.svg?branch=master)](https://coveralls.io/github/realfundtokens/smart-contracts?branch=master) 

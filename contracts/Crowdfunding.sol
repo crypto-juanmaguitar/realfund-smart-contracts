@@ -10,14 +10,17 @@ import "./Project.sol";
 
 
 /// @title Crowdfunding
-/// @author 
+/// @author JuanMa Garrido
 /// @notice
 /// @dev
 contract Crowdfunding {
     using SafeMath for uint256;
 
-    /// @notice
+    /** STATE VARIABLES */
+
     Project[] private projects; // List of existing projects
+
+    /** EVENTS */
 
     // Event that will be emitted whenever a new project is started
     event ProjectStarted(
@@ -28,6 +31,8 @@ contract Crowdfunding {
         uint256 deadline,
         uint256 goalAmount
     );
+
+    /** BODY */
 
     /** @dev Function to start a new project.
       * @param _title Title of the project to be created

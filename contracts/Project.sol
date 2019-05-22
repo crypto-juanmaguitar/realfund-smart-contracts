@@ -1,10 +1,13 @@
 pragma solidity ^0.5.8;
 // pragma solidity >=0.4.21 <0.6.0;
 
-// Importing OpenZeppelin's SafeMath Implementation
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 
+/// @title Crowdfunding
+/// @author JuanMa Garrido
+/// @notice
+/// @dev
 contract Project {
     using SafeMath for uint256;
     
@@ -26,9 +29,6 @@ contract Project {
     
     /// date when the funding is completed
     uint public closedAt;
-
-    /// current balance of the project
-    uint256 public currentBalance;
     
     /// date when the funding should be completed or everyone gets refund
     uint public raiseBy;
@@ -68,6 +68,8 @@ contract Project {
         _;
     }
 
+    /** BODY */
+
     constructor
     (
         address payable projectStarter,
@@ -81,7 +83,6 @@ contract Project {
         description = projectDesc;
         amountGoal = goalAmount;
         raiseBy = fundRaisingDeadline;
-        currentBalance = 0;
     }
 
     /// @dev Function to fund this project.
@@ -134,7 +135,7 @@ contract Project {
         string memory projectDesc,
         uint256 deadline,
         State currentState,
-        uint256 currentAmount,
+        uint256 currentBalance,
         uint256 goalAmount
     ) 
     {
@@ -143,7 +144,7 @@ contract Project {
         projectDesc = description;
         deadline = raiseBy;
         currentState = state;
-        currentAmount = currentBalance;
+        currentBalance = address(this).balance;
         goalAmount = amountGoal;
     }
 }
