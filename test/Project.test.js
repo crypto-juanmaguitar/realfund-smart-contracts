@@ -1,10 +1,11 @@
 /* eslint-disable */
 import moment from 'moment'
+import './helpers/_environment'
 import { latestTime } from './helpers/time'
+import { etherToWei, balanceAddress } from './helpers/wei'
 
 const Project = artifacts.require('Project')
 
-// const FINNEY = 10 ** 15
 const DAY = 3600 * 24 * 1000
 
 const State = {
@@ -20,7 +21,7 @@ contract('Project', accounts => {
   const _title = 'test project title'
   const _description = 'test project description'
   const _duration = DAY * 4
-  const _goal = 100
+  const _goal = etherToWei(100)
 
   beforeEach(async () => {
     project = await Project.new(
@@ -37,10 +38,11 @@ contract('Project', accounts => {
   })
 
   it('should start with a balance of zero', async () => {
+    const ZERO_BALANCE = etherToWei(0)
     const projectAddress = await project.address
-    const strBalance = await web3.eth.getBalance(projectAddress)
-    const balance = parseInt(strBalance,10)
-    assert.equal(balance, 0)
+    const balance = await balanceAddress(projectAddress)
+    const balanceInWei = etherToWei(balance)
+    assert.equal(balanceInWei.eq(ZERO_BALANCE), true)
   })
 
   it('should start with a Fundraising State', async () => {
@@ -58,11 +60,20 @@ contract('Project', accounts => {
     const description = await project.description()
     const goal = await project.goal()
     const finishesAt = await project.finishesAt()
-
+    
     assert.equal(title, _title)
     assert.equal(description, _description)
-    assert.equal(goal, _goal)
     assert.equal(finishesAt > _duration, true)
+    assert.equal(goal.eq(_goal), true)
+    
+    // goal.should.bignumber.equals(_goal);
   })
+
+  xit("should accepts contributions", async () => {
+    await funding.donate({ from: firstAccount, value: 10 * FINNEY });
+    await funding.donate({ from: secondAccount, value: 20 * FINNEY });
+    const balanceSmartContract = web3.eth.getBalance(funding.address).toNumber()
+    assert.equal(balanceSmartContract, 30 * FINNEY);
+  });
 
 })
