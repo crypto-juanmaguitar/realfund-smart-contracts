@@ -24,12 +24,12 @@ contract Crowdfunding {
 
     // Event that will be emitted whenever a new project is started
     event ProjectStarted(
-        address contractAddress,
-        address projectStarter,
-        string projectTitle,
-        string projectDesc,
-        uint256 deadline,
-        uint256 goalAmount
+        address addressContract,
+        address starter,
+        string title,
+        string description,
+        uint256 duration,
+        uint256 goal
     );
 
     /** BODY */
@@ -37,7 +37,7 @@ contract Crowdfunding {
     /** @dev Function to start a new project.
       * @param _title Title of the project to be created
       * @param _description Brief description about the project
-      * @param _duration Project deadline in seconds (to count from now)
+      * @param _duration duration in seconds (to count from now)
       * @param _amountToRaise Project goal in wei
       */
     function startProject(
@@ -48,15 +48,14 @@ contract Crowdfunding {
     ) 
         public 
     {
-        uint _raiseUntil = now + _duration; // solium-disable-line security/no-block-members
-        Project newProject = new Project(msg.sender, _title, _description, _raiseUntil, _amountToRaise);
+        Project newProject = new Project(msg.sender, _title, _description, _duration, _amountToRaise);
         projects.push(newProject);
         emit ProjectStarted (
             address(newProject),
             msg.sender,
             _title,
             _description,
-            _raiseUntil,
+            _duration,
             _amountToRaise
         );
     }                                                                                                                          
@@ -64,7 +63,7 @@ contract Crowdfunding {
     /** @dev Function to get all projects' contract addresses.
       * @return A list of all projects' contract addreses
       */
-    function returnAllProjects() external view returns(Project[] memory) {
+    function getProjects() external view returns(Project[] memory) {
         return projects;
     }
 

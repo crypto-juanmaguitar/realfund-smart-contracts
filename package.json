@@ -76,6 +76,7 @@
     "ganache-cli": "^6.4.2",
     "mocha-junit-reporter": "^1.21.0",
     "mocha-multi-reporters": "^1.1.7",
+    "moment": "^2.24.0",
     "prettier": "^1.17.1",
     "solidity-coverage": "0.5.11",
     "solium": "1.2.4"

@@ -1,73 +1,68 @@
 /* eslint-disable */
+import moment from 'moment'
+import { latestTime } from './helpers/time'
+
 const Project = artifacts.require('Project')
 
 // const FINNEY = 10 ** 15
-const DAY = 3600 * 24
+const DAY = 3600 * 24 * 1000
+
+const State = {
+  Fundraising: 0,
+  Expired: 1,
+  Successful: 2
+}
 
 contract('Project', accounts => {
   const [firstAccount /*, secondAccount, thirdAccount */] = accounts
   let project
 
-  const title = 'test project title'
-  const description = 'test project description'
-  const duration = Date.now()  + DAY * 4
-  const amount = 100
+  const _title = 'test project title'
+  const _description = 'test project description'
+  const _duration = DAY * 4
+  const _goal = 100
 
   beforeEach(async () => {
-
     project = await Project.new(
       firstAccount,
-      title,
-      description,
-      duration,
-      amount
+      _title,
+      _description,
+      _duration,
+      _goal
     )
-
   })
 
   afterEach(async () => {
     project = null
   })
 
-  it('should retutn the project details', async () => {
-    const projectDetails = await project.getDetails()
-    const {
-      projectStarter,
-      projectTitle,
-      projectDesc,
-      deadline,
-      currentState,
-      currentBalance,
-      goalAmount
-    } = projectDetails
-
-    assert.equal(projectTitle, title)
-    assert.equal(projectDesc, description)
-    assert.equal(projectDesc, description)
+  it('should start with a balance of zero', async () => {
+    const projectAddress = await project.address
+    const strBalance = await web3.eth.getBalance(projectAddress)
+    const balance = parseInt(strBalance,10)
+    assert.equal(balance, 0)
   })
 
-  // beforeEach(async () => {
-  //   const ownerProject = accounts[0]
-  //   // const title = 'test project title'
-  //   // const description = 'test project description'
-  //   // const durationInDays = 4
-  //   // const amountToRaise = 100
+  it('should start with a Fundraising State', async () => {
+    const currentState = await project.state()
+    assert.equal(currentState, State.Fundraising)
+  })
 
-  //   console.log(ownerProject)
+  it('should start with no contributions', async () => {
+    const contributions = await project.getContributors()
+    assert.equal(contributions.length, 0)
+  })
 
-  //   // //cosnt raiseUntil = now.add(durationInDays.mul(1 days));
+  it('should have available the project details', async () => {
+    const title = await project.title()
+    const description = await project.description()
+    const goal = await project.goal()
+    const finishesAt = await project.finishesAt()
 
-  //   // project = await Project.new()
-  // })
+    assert.equal(title, _title)
+    assert.equal(description, _description)
+    assert.equal(goal, _goal)
+    assert.equal(finishesAt > _duration, true)
+  })
 
-  // afterEach(async () => {
-  //   project = null
-  // })
-
-  // it('should assert true', function(done) {
-  //   // const project = Project.deployed()
-  //   console.log(typeof project === 'undefined')
-  //   assert.isTrue(true)
-  //   done()
-  // })
 })

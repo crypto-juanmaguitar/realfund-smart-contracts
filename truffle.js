@@ -1,3 +1,6 @@
+require('babel-register')
+require('babel-polyfill')
+
 require('dotenv').config()
 
 const INFURA_API_KEY = process.env.INFURA_API_KEY

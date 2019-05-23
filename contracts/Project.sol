@@ -25,25 +25,29 @@ contract Project {
     address payable public creator;
 
     /// required to reach at least this much, else everyone gets refund
-    uint public amountGoal;
+    uint public goal;
     
     /// date when the funding is completed
     uint public closedAt;
     
     /// date when the funding should be completed or everyone gets refund
-    uint public raiseBy;
+    uint public finishesAt;
 
     /// title of the project
     string public title;
     
-    /// @state description | description of the project
+    /// description of the project
     string public description;
 
-    /// @state state | state of the project
+    /// state of the project
     State public state = State.Fundraising; // initialize on create
 
-    /// @state contributions | maps that matches addresses and contributions
+    /// maps that matches addresses and contributions
     mapping (address => uint) public contributions;
+
+    // addresses Look Up Tables
+    address[] private contributionsAddresses;
+
 
     /** EVENTS */
 
@@ -57,8 +61,14 @@ contract Project {
     /** MODIFIERS */
 
     /// if current state is the one passed as argument
-    modifier inState(State _state) {
+    modifier onlyInState(State _state) {
         require(state == _state);
+        _;
+    }
+
+    // Modifier to check if the function caller is the project creator
+    modifier isCreator() {
+        require(msg.sender == creator);
         _;
     }
 
@@ -72,29 +82,30 @@ contract Project {
 
     constructor
     (
-        address payable projectStarter,
-        string memory projectTitle,
-        string memory projectDesc,
-        uint fundRaisingDeadline,
-        uint goalAmount
+        address payable _creator,
+        string memory _title,
+        string memory _description,
+        uint _duration,
+        uint _goal
     ) public {
-        creator = projectStarter;
-        title = projectTitle;
-        description = projectDesc;
-        amountGoal = goalAmount;
-        raiseBy = fundRaisingDeadline;
+        creator = _creator;
+        title = _title;
+        description = _description;
+        goal = _goal;
+        finishesAt = now + _duration;
     }
 
     /// @dev Function to fund this project.
-    function contribute() external inState(State.Fundraising) isNotCreator payable {
+    function contribute() external onlyInState(State.Fundraising) isNotCreator payable {
         contributions[msg.sender] = contributions[msg.sender].add(msg.value);
+        contributionsAddresses.push(msg.sender);
         emit FundingReceived(msg.sender, msg.value, address(this).balance);
         checkIfFundingCompleted();
     }
 
     /// @dev Check if funding goal has been achieved and set state accordingly
     function checkIfFundingCompleted() public {
-        if (address(this).balance >= amountGoal) {
+        if (address(this).balance >= goal) {
             state = State.Successful;
             closedAt = now;
             payOut();
@@ -103,20 +114,20 @@ contract Project {
 
     /// @dev Check if project has run out of time and set state accordingly
     function checkIfFundingExpired() public {
-        if (now > raiseBy) {
+        if (now > finishesAt) {
             state = State.Expired;
             closedAt = now;
         }
     }
 
     /// @dev Function to give the received funds to project starter.
-    function payOut() internal inState(State.Successful) {
+    function payOut() internal onlyInState(State.Successful) {
         creator.transfer(address(this).balance);
         emit CreatorPaid(creator);
     }
 
     /// @dev Function to retrieve donated amount when a project expires.
-    function getRefund() public inState(State.Expired) {
+    function getRefund() public onlyInState(State.Expired) {
         require(contributions[msg.sender] > 0);
 
         uint amountToRefund = contributions[msg.sender];
@@ -125,26 +136,12 @@ contract Project {
 
         msg.sender.transfer(amountToRefund);
     }
-   
-    /// @dev Function to get specific information about the project.
-    /// @return Returns all the project's details
-    function getDetails() public view returns 
-    (
-        address payable projectStarter,
-        string memory projectTitle,
-        string memory projectDesc,
-        uint256 deadline,
-        State currentState,
-        uint256 currentBalance,
-        uint256 goalAmount
-    ) 
-    {
-        projectStarter = creator;
-        projectTitle = title;
-        projectDesc = description;
-        deadline = raiseBy;
-        currentState = state;
-        currentBalance = address(this).balance;
-        goalAmount = amountGoal;
+
+    /** @dev Function to get all projects' contract addresses.
+      * @return A list of all projects' contract addreses
+      */
+    function getContributors() external view isCreator returns(address[] memory) {
+        return contributionsAddresses;
     }
+  
 }

@@ -6,7 +6,12 @@ const DAY = 3600 * 24;
 
 contract('Crowdfunding', accounts => {
   let crowdfunding
-  const crowdfundingOwner = accounts[0]
+  const _crowdfundingOwner = accounts[0]
+
+  const _title = 'test project title'
+  const _description = 'test project description'
+  const _duration = 4 * DAY
+  const _goal = 100
 
   beforeEach(async () => {
     crowdfunding = await Crowdfunding.new()
@@ -17,43 +22,35 @@ contract('Crowdfunding', accounts => {
   })
 
   describe('should be able to create projects', () => {
-    it(`triggering a 'ProjectStarted' event`, async () => {
-      const title = 'test project title'
-      const description = 'test project description'
-      const durationInSeconds = 4 * DAY
-      const amountToRaise = 100
-
+    it(`triggering a 'ProjectStarted' event w/ the proper data`, async () => {
+      
       const result = await crowdfunding.startProject(
-        title,
-        description,
-        durationInSeconds,
-        amountToRaise
+        _title,
+        _description,
+        _duration,
+        _goal
       )
 
       assert.equal(result.logs[0].event, 'ProjectStarted')
-      assert.equal(result.logs[0].args.projectTitle, title)
-      assert.equal(result.logs[0].args.projectDesc, description)
-      assert.equal(result.logs[0].args.goalAmount, amountToRaise)
-      assert.equal(result.logs[0].args.projectStarter, crowdfundingOwner)
+      assert.equal(result.logs[0].args.title, _title)
+      assert.equal(result.logs[0].args.description, _description)
+      assert.equal(result.logs[0].args.goal, _goal)
+      assert.equal(result.logs[0].args.starter, _crowdfundingOwner)
     })
 
     it('adding them to a list', async () => {
-      const title = 'test project title'
-      const description = 'test project description'
-      const durationInDays = 4
-      const amountToRaise = 100
 
-      const projectsBefore = await crowdfunding.returnAllProjects()
+      const projectsBefore = await crowdfunding.getProjects()
       assert.equal(projectsBefore.length, 0)
 
       await crowdfunding.startProject(
-        title,
-        description,
-        durationInDays,
-        amountToRaise
+        _title,
+        _description,
+        _duration,
+        _goal
       )
 
-      const projectsAfter = await crowdfunding.returnAllProjects()
+      const projectsAfter = await crowdfunding.getProjects()
       assert.equal(projectsAfter.length, 1)
     })
   })
