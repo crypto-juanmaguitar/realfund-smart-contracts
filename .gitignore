@@ -106,3 +106,5 @@ test-results/
 
 # Coveralls config file
 .coveralls.yml
+
+*.xxx

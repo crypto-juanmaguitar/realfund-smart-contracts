@@ -14,8 +14,10 @@ const State = {
   Successful: 2
 }
 
+let counter = 0
+
 contract('Project', accounts => {
-  const [firstAccount, secondAccount, thirdAccount ] = accounts
+  const [firstAccount, secondAccount, thirdAccount, forthAccount, fifthAccount] = accounts
   let project
 
   const _title = 'test project title'
@@ -38,11 +40,10 @@ contract('Project', accounts => {
   })
 
   it('should start with a balance of zero', async () => {
-    const ZERO_BALANCE = etherToWei(0)
     const projectAddress = await project.address
     const balance = await balanceAddress(projectAddress)
-    const balanceInWei = etherToWei(balance)
-    assert.equal(balanceInWei.eq(ZERO_BALANCE), true)
+    const balanceInEther = web3.utils.fromWei(balance, 'ether')
+    assert.equal(balanceInEther, 0)
   })
 
   it('should start with a Fundraising State', async () => {
@@ -60,19 +61,38 @@ contract('Project', accounts => {
     const description = await project.description()
     const goal = await project.goal()
     const finishesAt = await project.finishesAt()
-    
+
     assert.equal(title, _title)
     assert.equal(description, _description)
     assert.equal(finishesAt > _duration, true)
     assert.equal(goal.eq(_goal), true)
   })
 
-  it("should accepts contributions", async () => {
-    await project.contribute({ from: secondAccount, value: etherToWei(10) });
-    await project.contribute({ from: thirdAccount, value: etherToWei(20) });
+  xit('should accepts contributions', async () => {
+    await project.contribute({ from: secondAccount, value: etherToWei(10) })
+    await project.contribute({ from: thirdAccount, value: etherToWei(10) })
     const balance = await balanceAddress(project.address)
-    const balanceInEther = web3.utils.fromWei(balance, 'ether'); 
+    const balanceInEther = web3.utils.fromWei(balance, 'ether')
     assert.equal(balanceInEther, 30)
-  });
+  })
 
+  it('should keeps track of contributor balance', async () => {
+    
+    await project.contribute({ from: secondAccount, value: etherToWei(10) })
+    await project.contribute({ from: thirdAccount, value: etherToWei(20) })
+    await project.contribute({ from: secondAccount, value: etherToWei(30) })
+
+    const balanceSecondAccount = await project.contributions.call(secondAccount)
+    const balanceThirdAccount = await project.contributions.call(thirdAccount)
+    const balanceSecondAccountInEther = web3.utils.fromWei(
+      balanceSecondAccount,
+      'ether'
+    )
+    const balanceThirdAccountInEther = web3.utils.fromWei(
+      balanceThirdAccount,
+      'ether'
+    )
+    assert.equal(balanceSecondAccountInEther, 40)
+    assert.equal(balanceThirdAccountInEther, 20)
+  })
 })
