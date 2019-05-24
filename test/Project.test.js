@@ -68,7 +68,7 @@ contract('Project', accounts => {
     assert.equal(goal.eq(_goal), true)
   })
 
-  xit('should accepts contributions', async () => {
+  it('should accepts contributions', async () => {
     await project.contribute({ from: secondAccount, value: etherToWei(10) })
     await project.contribute({ from: thirdAccount, value: etherToWei(10) })
     const balance = await balanceAddress(project.address)
