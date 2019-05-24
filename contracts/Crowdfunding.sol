@@ -45,8 +45,8 @@ contract Crowdfunding {
         string memory _description,
         uint _duration,
         uint _amountToRaise
-    ) 
-        public 
+    )
+        public
     {
         Project newProject = new Project(msg.sender, _title, _description, _duration, _amountToRaise);
         projects.push(newProject);
@@ -58,7 +58,7 @@ contract Crowdfunding {
             _duration,
             _amountToRaise
         );
-    }                                                                                                                          
+    }
 
     /** @dev Function to get all projects' contract addresses.
       * @return A list of all projects' contract addreses
@@ -66,6 +66,5 @@ contract Crowdfunding {
     function getProjects() external view returns(Project[] memory) {
         return projects;
     }
-
 }
 

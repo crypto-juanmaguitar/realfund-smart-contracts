@@ -10,7 +10,7 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 /// @dev
 contract Project {
     using SafeMath for uint256;
-    
+
     /** STATE VARIABLES */
 
     /// project creator
@@ -18,16 +18,16 @@ contract Project {
 
     /// required to reach at least this much, else everyone gets refund
     uint public goal;
-    
+
     /// date when the funding is completed
     uint public closedAt;
-    
+
     /// date when the funding should be completed or everyone gets refund
     uint public finishesAt;
 
     /// title of the project
     string public title;
-    
+
     /// description of the project
     string public description;
 
@@ -42,7 +42,10 @@ contract Project {
 
     /// Event that will be emitted whenever funding will be received
     event FundingReceived(address contributor, uint amount, uint currentTotal);
-    
+
+    /// Event that will be emitted whenever goal is reached
+    event ProjectFunded(uint closedAt, uint currentTotal);
+
     /// Event that will be emitted whenever the project starter has received the funds
     event CreatorPaid(address recipient);
 
@@ -50,34 +53,34 @@ contract Project {
     /** MODIFIERS */
 
     // Modifier to check if the function caller is the project creator
-    modifier isCreator() {
-        require(msg.sender == creator);
+    modifier onlyCreator() {
+        require(msg.sender == creator, "current sender SHOULD BE the creator");
         _;
     }
 
     // Modifier to check if the function caller is the project creator
-    modifier isNotCreator() {
-        require(msg.sender != creator);
+    modifier onlyNotCreator() {
+        require(msg.sender != creator, "current sender SHOULD NOT BE the creator");
         _;
     }
 
     modifier onlyNotFinished() {
-        require(!isFinished());
+        require(!isFinished(), "current date SHOULD BE BEFORE -finishesAt- time");
         _;
     }
 
     modifier onlyFinished() {
-        require(isFinished());
+        require(isFinished(), "current date SHOULD BE AFTER -finishesAt- time");
         _;
     }
 
     modifier onlyNotFunded() {
-        require(!isFunded());
+        require(!isFunded(), "project SHOULD NOT BE funded");
         _;
     }
 
     modifier onlyFunded() {
-        require(isFunded());
+        require(isFunded(), "project SHOULD HAVE BEEN funded");
         _;
     }
 
@@ -99,43 +102,38 @@ contract Project {
     }
 
     /// @dev Function to fund this project.
-    function contribute() external onlyNotFinished isNotCreator payable {
+    function contribute() external onlyNotFinished onlyNotCreator payable {
         contributions[msg.sender] = contributions[msg.sender].add(msg.value);
         contributionsAddresses.push(msg.sender);
         emit FundingReceived(msg.sender, msg.value, address(this).balance);
-        checkIfFundingCompleted();
-    }
-
-    /// @dev Check if funding goal has been achieved and set state accordingly
-    function checkIfFundingCompleted() public {
         if (address(this).balance >= goal) {
             closedAt = now;
-            payOut();
+            emit ProjectFunded(closedAt, address(this).balance);
         }
     }
 
+    /** @dev Function to get all projects' contract addresses.
+      * @return A list of all projects' contract addreses
+      */
+    function getContributors() external view onlyCreator returns(address[] memory) {
+        return contributionsAddresses;
+    }
+
     /// @dev Function to give the received funds to project starter.
-    function payOut() internal onlyFunded {
+    function withdrawFunds() public onlyCreator onlyFunded {
         creator.transfer(address(this).balance);
         emit CreatorPaid(creator);
     }
 
     /// @dev Function to retrieve donated amount when a project expires.
     function getRefund() public onlyNotFunded onlyFinished {
-        require(contributions[msg.sender] > 0);
+        require(contributions[msg.sender] > 0, "this sender SHOULD HAVE some contributions");
 
         uint amountToRefund = contributions[msg.sender];
-        require(amountToRefund > 0);
+        require(amountToRefund > 0, "there SHOULD BE some amount to refund to this sender");
         contributions[msg.sender] = 0;
 
         msg.sender.transfer(amountToRefund);
-    }
-
-    /** @dev Function to get all projects' contract addresses.
-      * @return A list of all projects' contract addreses
-      */
-    function getContributors() external view isCreator returns(address[] memory) {
-        return contributionsAddresses;
     }
 
     function isFinished() public view returns (bool) {
@@ -145,5 +143,5 @@ contract Project {
     function isFunded() public view returns (bool) {
         return address(this).balance >= goal;
     }
-  
+
 }

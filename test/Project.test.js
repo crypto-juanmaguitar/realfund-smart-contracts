@@ -115,7 +115,7 @@ contract('Project', accounts => {
     assert.equal(balanceProjectInEther, 10)
   })
 
-  it('creator automatically gets paid out once the goal is reached', async () => {
+  it('allows creator to withdraw funds when goal is reached', async () => {
     const account16 = accounts[16]
     const account17 = accounts[17]
 
@@ -129,14 +129,20 @@ contract('Project', accounts => {
     await project.contribute({ from: account16, value: etherToWei(70) })
     await project.contribute({ from: account17, value: etherToWei(30) })
 
+    const fundedProjectBalance = await balanceAddress(project.address)
+    const fundedProjectBalanceInEther = web3.utils.fromWei(fundedProjectBalance)
+    assert.equal(fundedProjectBalanceInEther, 100)
+
+    await project.withdrawFunds();
+
     const finalBalanceCreator = await balanceAddress(creatorAccount)
     const finalBalanceCreatorInEther = web3.utils.fromWei(finalBalanceCreator)
     assert.isTrue(parseInt(finalBalanceCreatorInEther, 10) > parseInt(initBalanceCreatorInEther, 10)) // hard to be exact due to the gas usage
 
-    const afterPaidOutProjectBalance = await balanceAddress(project.address)
-    const afterPaidOutProjectBalanceInEther = web3.utils.fromWei(
-      afterPaidOutProjectBalance
+    const afterWithdrawProjectBalance = await balanceAddress(project.address)
+    const afterWithdrawProjectBalanceInEther = web3.utils.fromWei(
+      afterWithdrawProjectBalance
     )
-    assert.equal(afterPaidOutProjectBalanceInEther, 0)
+    assert.equal(afterWithdrawProjectBalanceInEther, 0)
   })
 })
