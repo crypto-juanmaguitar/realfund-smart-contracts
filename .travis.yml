@@ -6,17 +6,10 @@ cache:
   directories:
   - node_modules
 install:
-- npm install -g truffle@beta
-- npm install -g ganache-cli
 - npm install
 script:
-- npm run lint
-- npm run solium
-- npm run ganache
-- sleep 5
-- truffle migrate --network test
-- truffle test
-- npm run stop
+- npm run migrate:test
+- npm test
 deploy:
 #  - provider: script
 #    skip_cleanup: true

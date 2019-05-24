@@ -31,6 +31,7 @@
     "clean:contracts": "rimraf build/contracts",
     "build": "npm run clean:contracts && truffle compile",
     "migrate:kovan": "truffle migrate --network kovan",
+    "migrate:test": "truffle migrate --network test",
     "upgrade": "npm version patch",
     "upgrade:push": "git push && git push --tags",
     "docgen": "SOLC_PATH=/usr/local/bin/solc SOLC_ARGS='openzeppelin-solidity=`pwd`/node_modules/openzeppelin-solidity' node_modules/.bin/solidity-docgen . ./contracts ./docs"
