@@ -16,13 +16,19 @@ const State = {
 let counter = 0
 
 contract('Project', accounts => {
-  const [firstAccount, secondAccount, thirdAccount, forthAccount, fifthAccount] = accounts
+  const [
+    firstAccount,
+    secondAccount,
+    thirdAccount,
+    forthAccount,
+    fifthAccount
+  ] = accounts
   let project
 
   const _title = 'test project title'
   const _description = 'test project description'
   const _duration = DAY * 4
-  const _goal = etherToWei(100)
+  const _goal = 100
 
   beforeEach(async () => {
     project = await Project.new(
@@ -30,7 +36,7 @@ contract('Project', accounts => {
       _title,
       _description,
       _duration,
-      _goal
+      etherToWei(_goal)
     )
   })
 
@@ -48,7 +54,8 @@ contract('Project', accounts => {
   it('starts not being finished and not being funded', async () => {
     const isFinished = await project.isFinished()
     const isFunded = await project.isFunded()
-    assert.equal(!isFinished && !isFunded, true)
+    assert.isTrue(!isFinished)
+    assert.isTrue(!isFunded)
   })
 
   it('starts with no contributions', async () => {
@@ -65,7 +72,7 @@ contract('Project', accounts => {
     assert.equal(title, _title)
     assert.equal(description, _description)
     assert.equal(finishesAt > _duration, true)
-    assert.equal(goal.eq(_goal), true)
+    assert.isTrue(goal.eq(etherToWei(_goal)))
   })
 
   it('accepts contributions', async () => {
@@ -104,19 +111,53 @@ contract('Project', accounts => {
     assert.equal(balanceThirdAccountInEther, 20)
   })
 
-  it("does not allow for donations when time is up", async () => {
-    await project.contribute({ from: secondAccount, value: etherToWei(10) });
-    await increaseTime(DAY * 5);
+  it('does not allow for donations when time is up', async () => {
+    await project.contribute({ from: secondAccount, value: etherToWei(10) })
+    await increaseTime(DAY * 5)
     try {
-      await project.contribute({ from: thirdAccount, value: etherToWei(30) });
-      assert.fail();
+      await project.contribute({ from: thirdAccount, value: etherToWei(30) })
+      assert.fail()
     } catch (err) {
-      assert.ok(/revert/.test(err.message));
+      assert.ok(/revert/.test(err.message))
     }
 
     const balanceProject = await balanceAddress(project.address)
     const balanceProjectInEther = web3.utils.fromWei(balanceProject, 'ether')
     assert.equal(balanceProjectInEther, 10)
-  });
+  })
 
+  it('creator automatically gets paid out once the goal is reached', async () => {
+    const creatorAccount = firstAccount
+    const initProjectBalance = await balanceAddress(project.address)
+    const initProjectBalanceInEther = web3.utils.fromWei(
+      initProjectBalance,
+      'ether'
+    )
+    assert.equal(initProjectBalanceInEther, 0)
+
+    const initBalanceCreator = await balanceAddress(creatorAccount)
+    const initBalanceCreatorInEther = web3.utils.fromWei(
+      initBalanceCreator,
+      'ether'
+    )
+
+    await project.contribute({ from: secondAccount, value: etherToWei(70) })
+    await project.contribute({ from: thirdAccount, value: etherToWei(30) })
+
+    const finalBalanceCreator = await balanceAddress(creatorAccount)
+    const finalBalanceCreatorInEther = web3.utils.fromWei(
+      finalBalanceCreator,
+      'ether'
+    )
+    console.log({initBalanceCreator, finalBalanceCreator})
+    assert.isAbove(finalBalanceCreatorInEther, initBalanceCreatorInEther) // hard to be exact due to the gas usage
+
+    const afterPaidOutProjectBalance = await balanceAddress(project.address)
+    const afterPaidOutProjectBalanceInEther = web3.utils.fromWei(
+      afterPaidOutProjectBalance,
+      'ether'
+    )
+    assert.equal(afterPaidOutProjectBalanceInEther, 0)
+
+  })
 })
