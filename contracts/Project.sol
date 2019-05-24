@@ -100,7 +100,7 @@ contract Project {
         contributions[msg.sender] = contributions[msg.sender].add(msg.value);
         contributionsAddresses.push(msg.sender);
         emit FundingReceived(msg.sender, msg.value, address(this).balance);
-        checkIfFundingCompleted();
+        // checkIfFundingCompleted();
     }
 
     /// @dev Check if funding goal has been achieved and set state accordingly

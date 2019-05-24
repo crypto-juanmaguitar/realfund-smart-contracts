@@ -15,7 +15,7 @@ const State = {
 }
 
 contract('Project', accounts => {
-  const [firstAccount /*, secondAccount, thirdAccount */] = accounts
+  const [firstAccount, secondAccount, thirdAccount ] = accounts
   let project
 
   const _title = 'test project title'
@@ -65,15 +65,14 @@ contract('Project', accounts => {
     assert.equal(description, _description)
     assert.equal(finishesAt > _duration, true)
     assert.equal(goal.eq(_goal), true)
-    
-    // goal.should.bignumber.equals(_goal);
   })
 
-  xit("should accepts contributions", async () => {
-    await funding.donate({ from: firstAccount, value: 10 * FINNEY });
-    await funding.donate({ from: secondAccount, value: 20 * FINNEY });
-    const balanceSmartContract = web3.eth.getBalance(funding.address).toNumber()
-    assert.equal(balanceSmartContract, 30 * FINNEY);
+  it("should accepts contributions", async () => {
+    await project.contribute({ from: secondAccount, value: etherToWei(10) });
+    await project.contribute({ from: thirdAccount, value: etherToWei(20) });
+    const balance = await balanceAddress(project.address)
+    const balanceInEther = web3.utils.fromWei(balance, 'ether'); 
+    assert.equal(balanceInEther, 30)
   });
 
 })
