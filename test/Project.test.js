@@ -69,15 +69,23 @@ contract('Project', accounts => {
   })
 
   it('should accepts contributions', async () => {
+    const balanceProject = await balanceAddress(project.address)
+    const balanceProjectInEther = web3.utils.fromWei(balanceProject, 'ether')
+    assert.equal(balanceProjectInEther, 0)
+
     await project.contribute({ from: secondAccount, value: etherToWei(10) })
-    await project.contribute({ from: thirdAccount, value: etherToWei(10) })
+    await project.contribute({ from: thirdAccount, value: etherToWei(20) })
+
     const balance = await balanceAddress(project.address)
     const balanceInEther = web3.utils.fromWei(balance, 'ether')
     assert.equal(balanceInEther, 30)
   })
 
   it('should keeps track of contributor balance', async () => {
-    
+    const balanceProject = await balanceAddress(project.address)
+    const balanceProjectInEther = web3.utils.fromWei(balanceProject, 'ether')
+    assert.equal(balanceProjectInEther, 0)
+
     await project.contribute({ from: secondAccount, value: etherToWei(10) })
     await project.contribute({ from: thirdAccount, value: etherToWei(20) })
     await project.contribute({ from: secondAccount, value: etherToWei(30) })
