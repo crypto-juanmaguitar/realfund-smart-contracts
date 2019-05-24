@@ -11,14 +11,6 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 contract Project {
     using SafeMath for uint256;
     
-    /** DATA STRUCTURES */
-
-    enum State {
-        Fundraising,
-        Expired,
-        Successful
-    }
-
     /** STATE VARIABLES */
 
     /// project creator
@@ -39,9 +31,6 @@ contract Project {
     /// description of the project
     string public description;
 
-    /// state of the project
-    State public state = State.Fundraising; // initialize on create
-
     /// maps that matches addresses and contributions
     mapping (address => uint) public contributions;
 
@@ -60,12 +49,6 @@ contract Project {
 
     /** MODIFIERS */
 
-    /// if current state is the one passed as argument
-    modifier onlyInState(State _state) {
-        require(state == _state);
-        _;
-    }
-
     // Modifier to check if the function caller is the project creator
     modifier isCreator() {
         require(msg.sender == creator);
@@ -75,6 +58,26 @@ contract Project {
     // Modifier to check if the function caller is the project creator
     modifier isNotCreator() {
         require(msg.sender != creator);
+        _;
+    }
+
+    modifier onlyNotFinished() {
+        require(!isFinished());
+        _;
+    }
+
+    modifier onlyFinished() {
+        require(isFinished());
+        _;
+    }
+
+    modifier onlyNotFunded() {
+        require(!isFunded());
+        _;
+    }
+
+    modifier onlyFunded() {
+        require(isFunded());
         _;
     }
 
@@ -96,38 +99,29 @@ contract Project {
     }
 
     /// @dev Function to fund this project.
-    function contribute() external onlyInState(State.Fundraising) isNotCreator payable {
+    function contribute() external onlyNotFinished isNotCreator payable {
         contributions[msg.sender] = contributions[msg.sender].add(msg.value);
         contributionsAddresses.push(msg.sender);
         emit FundingReceived(msg.sender, msg.value, address(this).balance);
-        // checkIfFundingCompleted();
+        checkIfFundingCompleted();
     }
 
     /// @dev Check if funding goal has been achieved and set state accordingly
     function checkIfFundingCompleted() public {
         if (address(this).balance >= goal) {
-            state = State.Successful;
             closedAt = now;
             payOut();
         }
     }
 
-    /// @dev Check if project has run out of time and set state accordingly
-    function checkIfFundingExpired() public {
-        if (now > finishesAt) {
-            state = State.Expired;
-            closedAt = now;
-        }
-    }
-
     /// @dev Function to give the received funds to project starter.
-    function payOut() internal onlyInState(State.Successful) {
+    function payOut() internal onlyFunded {
         creator.transfer(address(this).balance);
         emit CreatorPaid(creator);
     }
 
     /// @dev Function to retrieve donated amount when a project expires.
-    function getRefund() public onlyInState(State.Expired) {
+    function getRefund() public onlyNotFunded onlyFinished {
         require(contributions[msg.sender] > 0);
 
         uint amountToRefund = contributions[msg.sender];
@@ -142,6 +136,14 @@ contract Project {
       */
     function getContributors() external view isCreator returns(address[] memory) {
         return contributionsAddresses;
+    }
+
+    function isFinished() public view returns (bool) {
+        return finishesAt <= now;
+    }
+
+    function isFunded() public view returns (bool) {
+        return address(this).balance >= goal;
     }
   
 }

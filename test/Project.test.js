@@ -1,7 +1,6 @@
 /* eslint-disable */
-import moment from 'moment'
 import './helpers/_environment'
-import { latestTime } from './helpers/time'
+import { increaseTime } from './helpers/time'
 import { etherToWei, balanceAddress } from './helpers/wei'
 
 const Project = artifacts.require('Project')
@@ -39,24 +38,25 @@ contract('Project', accounts => {
     project = null
   })
 
-  it('should start with a balance of zero', async () => {
+  it('starts with a balance of zero', async () => {
     const projectAddress = await project.address
     const balance = await balanceAddress(projectAddress)
     const balanceInEther = web3.utils.fromWei(balance, 'ether')
     assert.equal(balanceInEther, 0)
   })
 
-  it('should start with a Fundraising State', async () => {
-    const currentState = await project.state()
-    assert.equal(currentState, State.Fundraising)
+  it('starts not being finished and not being funded', async () => {
+    const isFinished = await project.isFinished()
+    const isFunded = await project.isFunded()
+    assert.equal(!isFinished && !isFunded, true)
   })
 
-  it('should start with no contributions', async () => {
+  it('starts with no contributions', async () => {
     const contributions = await project.getContributors()
     assert.equal(contributions.length, 0)
   })
 
-  it('should have available the project details', async () => {
+  it('has available the project details', async () => {
     const title = await project.title()
     const description = await project.description()
     const goal = await project.goal()
@@ -68,7 +68,7 @@ contract('Project', accounts => {
     assert.equal(goal.eq(_goal), true)
   })
 
-  it('should accepts contributions', async () => {
+  it('accepts contributions', async () => {
     const balanceProject = await balanceAddress(project.address)
     const balanceProjectInEther = web3.utils.fromWei(balanceProject, 'ether')
     assert.equal(balanceProjectInEther, 0)
@@ -81,7 +81,7 @@ contract('Project', accounts => {
     assert.equal(balanceInEther, 30)
   })
 
-  it('should keeps track of contributor balance', async () => {
+  it('keeps track of contributor balance', async () => {
     const balanceProject = await balanceAddress(project.address)
     const balanceProjectInEther = web3.utils.fromWei(balanceProject, 'ether')
     assert.equal(balanceProjectInEther, 0)
@@ -103,4 +103,20 @@ contract('Project', accounts => {
     assert.equal(balanceSecondAccountInEther, 40)
     assert.equal(balanceThirdAccountInEther, 20)
   })
+
+  it("does not allow for donations when time is up", async () => {
+    await project.contribute({ from: secondAccount, value: etherToWei(10) });
+    await increaseTime(DAY * 5);
+    try {
+      await project.contribute({ from: thirdAccount, value: etherToWei(30) });
+      assert.fail();
+    } catch (err) {
+      assert.ok(/revert/.test(err.message));
+    }
+
+    const balanceProject = await balanceAddress(project.address)
+    const balanceProjectInEther = web3.utils.fromWei(balanceProject, 'ether')
+    assert.equal(balanceProjectInEther, 10)
+  });
+
 })
