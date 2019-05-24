@@ -8,8 +8,13 @@ cache:
 install:
 - npm install
 script:
+- npm run lint
+- npm run solium
+- npm run ganache
+- sleep 5
 - npm run migrate:test
-- npm test
+- npm run test:truffle
+- npm run stop
 deploy:
 #  - provider: script
 #    skip_cleanup: true

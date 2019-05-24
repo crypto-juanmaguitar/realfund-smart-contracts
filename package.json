@@ -20,6 +20,7 @@
     "ganache": "ganache-cli -e 100 -p 9545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
     "stop": "sudo kill `sudo lsof -t -i:9545`",
     "test": "npm run ganache sleep 5 && npm run lint && npm run solium && truffle test && npm run stop",
+    "test:truffle": "truffle test",
     "test:gas-reporter": "GAS_REPORTER=true npm run test",
     "test-ci": "GAS_REPORTER=true npm run ganache sleep 5 && npm run lint ./ && npm run solium && truffle test",
     "coverage": "./node_modules/.bin/solidity-coverage",
