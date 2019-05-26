@@ -1,5 +1,4 @@
 /* eslint-disable */
-import './helpers/_environment'
 import { increaseTime } from './helpers/time'
 import { etherToWei, weiToEher, balanceAddressInEther } from './helpers/wei'
 
