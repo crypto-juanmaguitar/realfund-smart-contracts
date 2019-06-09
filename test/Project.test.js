@@ -8,7 +8,7 @@ const TokenSTP = artifacts.require('TokenSTP')
 const DAY = 3600 * 24 * 1000
 
 contract('Project', accounts => {
-  let project
+  let project, tokenInstance
 
   const creatorAccount = accounts[0]
   const _title = 'test project title'
@@ -19,15 +19,15 @@ contract('Project', accounts => {
   let contributionsAddressInEther
 
   beforeEach(async () => {
-    tokenInstance = await DappToken.deployed()
-    tokenSaleInstance = await DappTokenSale.deployed()
+    tokenInstance = await TokenSTP.deployed()
 
     project = await Project.new(
       creatorAccount,
       _title,
       _description,
       _duration,
-      etherToWei(_goal)
+      etherToWei(_goal),
+      tokenInstance.address
     )
 
     contributionsAddressInEther = async address => {
@@ -217,7 +217,7 @@ contract('Project', accounts => {
     }
   })
 
-  it('allows contributors to get STP tokens after time is up and goal is reached', async () => {
+  xit('allows contributors to get STP tokens after time is up and goal is reached', async () => {
     const account24 = accounts[24]
     const account25 = accounts[25]
 
