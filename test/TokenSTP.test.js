@@ -9,11 +9,6 @@ const DECIMALS = 18
 contract('TokenProjectRealFund', accounts => {
   let token
 
-  const creatorAccount = accounts[0]
-
-  console.log('---TOKEN---')
-  console.log({ creatorAccount })
-
   beforeEach(async () => {
     token = await TokenSTP.new(NAME, SYMBOL, DECIMALS)
   })

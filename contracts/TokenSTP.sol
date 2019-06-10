@@ -13,12 +13,17 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20Pausable.sol";
  */
 
 
-contract TokenSTP is ERC20Mintable, ERC20Pausable, ERC20Detailed {
+contract TokenSTP is ERC20Pausable, ERC20Detailed {
     /* solium-disable no-empty-blocks */
-    constructor(string memory _name, string memory _symbol, uint8 _decimals)
+    constructor (string memory _name, string memory _symbol, uint8 _decimals)
         ERC20Detailed(_name, _symbol, _decimals)
         public
     {
 
+    }
+
+    function mint(address account, uint256 amount) public returns (bool) {
+        _mint(account, amount);
+        return true;
     }
 }

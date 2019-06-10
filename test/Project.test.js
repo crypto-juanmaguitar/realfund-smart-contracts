@@ -12,13 +12,11 @@ contract('Project', accounts => {
 
   const creatorAccount = accounts[0]
 
-  console.log('---PROJECT---')
-  console.log({creatorAccount})
-
   const _title = 'test project title'
   const _description = 'test project description'
   const _duration = DAY * 4
   const _goal = 100
+  const _rate = web3.utils.toBN(web3.utils.toWei('1', 'ether'))
 
   let contributionsAddressInEther
 
@@ -31,7 +29,8 @@ contract('Project', accounts => {
       _description,
       _duration,
       etherToWei(_goal),
-      tokenInstance.address
+      tokenInstance.address,
+      _rate
     )
 
     contributionsAddressInEther = async address => {
@@ -241,13 +240,9 @@ contract('Project', accounts => {
 
     await increaseTime(DAY * 5)
     
-    const canMint = await tokenInstance.isMinter(creatorAccount)
-    assert.isTrue(canMint)
-  
     await project.getTokens(account24, { from: creatorAccount })
 
-    // const balanceTokenSTPAccount24 = await tokenInstance.balanceOf(account24)
-
-    // assert.equal(balanceTokenSTPAccount24, etherToWei(50))
+    const balanceTokenSTPAccount24 = await tokenInstance.balanceOf(account24)
+    assert.equal(balanceTokenSTPAccount24, 50)
   })
 })

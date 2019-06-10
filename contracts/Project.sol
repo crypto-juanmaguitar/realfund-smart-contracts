@@ -19,6 +19,9 @@ contract Project {
     /// token address
     address tokenAddress;
 
+    /// token rate
+    uint256 rate;
+
     /// required to reach at least this much, else everyone gets refund
     uint public goal;
 
@@ -99,7 +102,8 @@ contract Project {
         string memory _description,
         uint _duration,
         uint _goal,
-        address _tokenAddress
+        address _tokenAddress,
+        uint256 _rate
     ) 
     public 
     {
@@ -109,6 +113,7 @@ contract Project {
         goal = _goal;
         finishesAt = now + _duration;
         tokenAddress = _tokenAddress;
+        rate = _rate;
     }
 
     /// @dev Function to fund this project.
@@ -150,7 +155,7 @@ contract Project {
     function getTokens(address targetTokens) public onlyCreator onlyFunded onlyFinished {
         require(contributions[targetTokens] > 0, "this sender SHOULD HAVE some contributions");
 
-        uint tokensToDistribute = contributions[targetTokens];
+        uint tokensToDistribute = contributions[targetTokens].div(rate);
         require(tokensToDistribute > 0, "there SHOULD BE some amount of tokens to distribute to this sender");
 
         TokenSTP _tokenSTP = TokenSTP(tokenAddress);
