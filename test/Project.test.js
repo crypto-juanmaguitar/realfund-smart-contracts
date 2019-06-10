@@ -70,6 +70,22 @@ contract('Project', accounts => {
     assert.isTrue(goal.eq(etherToWei(_goal)))
   })
 
+  it('has access to the STP token smart contract', async () => {
+    const _tokenName = "RealFund Token Project";
+    const _tokenSymbol = "STP";
+
+    const tokenSTPAdress = await project.tokenSTP()
+    const tokenSTP = await TokenSTP.at(tokenSTPAdress)
+    
+    const tokenName = await tokenSTP.name()
+    const tokenSymbol = await tokenSTP.symbol()
+  
+    assert.equal(tokenName, _tokenName)
+    assert.equal(tokenSymbol, _tokenSymbol)
+
+    assert.equal(project.tokenSymbol(), _tokenSymbol)
+  })
+
   it('accepts contributions', async () => {
     const account10 = accounts[10]
     const account11 = accounts[11]

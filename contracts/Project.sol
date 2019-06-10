@@ -147,17 +147,19 @@ contract Project {
     }
 
     /// @dev Function to retrieve tokens representing the contribution
-    /// function getTokens() public onlyFunded onlyFinished {
-    ///     require(contributions[msg.sender] > 0, "this sender SHOULD HAVE some contributions");
+    function getTokens() public onlyFunded onlyFinished {
+        require(contributions[msg.sender] > 0, "this sender SHOULD HAVE some contributions");
 
-    ///     uint tokensToDistribute = contributions[msg.sender];
-    ///     require(tokensToDistribute > 0, "there SHOULD BE some amount of tokens to distribute to this sender");
+        uint tokensToDistribute = contributions[msg.sender];
+        require(tokensToDistribute > 0, "there SHOULD BE some amount of tokens to distribute to this sender");
+
+        /// require(tokenSTP.symbol() == "STP");
         
-    ///     tokenSTP.transfer(to, 1);
-    ///     //// contributions[msg.sender] = 0;
+        /// tokenSTP.transfer(to, 1);
+        ///contributions[msg.sender] = 0;
 
-    ///     //// msg.sender.transfer(amountToRefund);
-    /// }
+        ///msg.sender.transfer(amountToRefund);
+    }
 
     function isFinished() public view returns (bool) {
         return finishesAt <= now;
@@ -165,6 +167,10 @@ contract Project {
 
     function isFunded() public view returns (bool) {
         return address(this).balance >= goal;
+    }
+
+    function tokenSymbol() public view returns (string memory) {
+        return tokenSTP.symbol();
     }
 
 }
