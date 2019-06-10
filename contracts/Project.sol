@@ -2,6 +2,7 @@ pragma solidity >=0.4.21 <0.6.0;
 
 import "./TokenSTP.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol";
 
 
@@ -148,18 +149,15 @@ contract Project {
     }
 
     /// @dev Function to retrieve tokens representing the contribution
-    /// function getTokens() public view onlyFunded onlyFinished {
-    ///     require(contributions[msg.sender] > 0, "this sender SHOULD HAVE some contributions");
+    function getTokens(address targetTokens) public onlyCreator onlyFunded onlyFinished {
+        require(contributions[targetTokens] > 0, "this sender SHOULD HAVE some contributions");
 
-    ///     uint tokensToDistribute = contributions[msg.sender];
-    ///     require(tokensToDistribute > 0, "there SHOULD BE some amount of tokens to distribute to this sender");
-    ///     //// require(tokenSTP.symbol() == "STP");
-        
-    ///     //// tokenSTP.transfer(to, 1);
-    ///     ///contributions[msg.sender] = 0;
+        uint tokensToDistribute = contributions[targetTokens];
+        require(tokensToDistribute > 0, "there SHOULD BE some amount of tokens to distribute to this sender");
 
-    ///     ///msg.sender.transfer(amountToRefund);
-    /// }
+        ERC20Mintable _mintableTokenSTP = ERC20Mintable(tokenAddress);
+        _mintableTokenSTP.mint(targetTokens, tokensToDistribute);
+    }
 
     function isFinished() public view returns (bool) {
         return finishesAt <= now;
@@ -170,8 +168,8 @@ contract Project {
     }
 
     function tokenSymbol() public view returns (string memory) {
-        ERC20Detailed tokenSTP = ERC20Detailed(tokenAddress);
-        return tokenSTP.symbol();
+        ERC20Detailed _detailedTokenSTP = ERC20Detailed(tokenAddress);
+        return _detailedTokenSTP.symbol();
     }
 
 }
