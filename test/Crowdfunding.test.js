@@ -1,10 +1,11 @@
 /* eslint-disable */
 const Crowdfunding = artifacts.require('Crowdfunding')
+const TokenSTP = artifacts.require('TokenSTP')
 
 const DAY = 3600 * 24 * 1000
 
 contract('Crowdfunding', accounts => {
-  let crowdfunding
+  let crowdfunding, tokenInstance
   const _crowdfundingOwner = accounts[0]
 
   const TITLE = 'test project title'
@@ -13,7 +14,8 @@ contract('Crowdfunding', accounts => {
   const GOAL = 100
 
   beforeEach(async () => {
-    crowdfunding = await Crowdfunding.new()
+    tokenInstance = await TokenSTP.deployed()
+    crowdfunding = await Crowdfunding.new(tokenInstance.address)
   })
 
   afterEach(async () => {

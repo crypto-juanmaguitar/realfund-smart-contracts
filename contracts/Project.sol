@@ -1,7 +1,8 @@
 pragma solidity >=0.4.21 <0.6.0;
-// pragma solidity >=0.4.21 <0.6.0;
 
+import "./TokenSTP.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol";
 
 
 /// @title Crowdfunding
@@ -15,6 +16,9 @@ contract Project {
 
     /// project creator
     address payable public creator;
+
+    /// token address
+    address tokenAddress;
 
     /// required to reach at least this much, else everyone gets refund
     uint public goal;
@@ -33,6 +37,9 @@ contract Project {
 
     /// maps that matches addresses and contributions
     mapping (address => uint) public contributions;
+
+    /// maps that matches addresses and contributions
+    mapping (address => uint) public tokensDistribution;
 
     // addresses Look Up Tables
     address[] private contributionsAddresses;
@@ -92,13 +99,17 @@ contract Project {
         string memory _title,
         string memory _description,
         uint _duration,
-        uint _goal
-    ) public {
+        uint _goal,
+        address _tokenAddress
+    ) 
+    public 
+    {
         creator = _creator;
         title = _title;
         description = _description;
         goal = _goal;
         finishesAt = now + _duration;
+        tokenAddress = _tokenAddress;
     }
 
     /// @dev Function to fund this project.
@@ -136,12 +147,31 @@ contract Project {
         msg.sender.transfer(amountToRefund);
     }
 
+    /// @dev Function to retrieve tokens representing the contribution
+    /// function getTokens() public view onlyFunded onlyFinished {
+    ///     require(contributions[msg.sender] > 0, "this sender SHOULD HAVE some contributions");
+
+    ///     uint tokensToDistribute = contributions[msg.sender];
+    ///     require(tokensToDistribute > 0, "there SHOULD BE some amount of tokens to distribute to this sender");
+    ///     //// require(tokenSTP.symbol() == "STP");
+        
+    ///     //// tokenSTP.transfer(to, 1);
+    ///     ///contributions[msg.sender] = 0;
+
+    ///     ///msg.sender.transfer(amountToRefund);
+    /// }
+
     function isFinished() public view returns (bool) {
         return finishesAt <= now;
     }
 
     function isFunded() public view returns (bool) {
         return address(this).balance >= goal;
+    }
+
+    function tokenSymbol() public view returns (string memory) {
+        ERC20Detailed tokenSTP = ERC20Detailed(tokenAddress);
+        return tokenSTP.symbol();
     }
 
 }

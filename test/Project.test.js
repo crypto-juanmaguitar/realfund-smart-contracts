@@ -3,11 +3,12 @@ import { increaseTime } from './helpers/time'
 import { etherToWei, weiToEher, balanceAddressInEther } from './helpers/wei'
 
 const Project = artifacts.require('Project')
+const TokenSTP = artifacts.require('TokenSTP')
 
 const DAY = 3600 * 24 * 1000
 
 contract('Project', accounts => {
-  let project
+  let project, tokenInstance
 
   const creatorAccount = accounts[0]
   const _title = 'test project title'
@@ -18,12 +19,15 @@ contract('Project', accounts => {
   let contributionsAddressInEther
 
   beforeEach(async () => {
+    tokenInstance = await TokenSTP.deployed()
+
     project = await Project.new(
       creatorAccount,
       _title,
       _description,
       _duration,
-      etherToWei(_goal)
+      etherToWei(_goal),
+      tokenInstance.address
     )
 
     contributionsAddressInEther = async address => {
@@ -64,6 +68,12 @@ contract('Project', accounts => {
     assert.equal(description, _description)
     assert.equal(finishesAt > _duration, true)
     assert.isTrue(goal.eq(etherToWei(_goal)))
+  })
+
+  it('has access to the STP token smart contract', async () => {
+    const _tokenSymbol = "STP";
+
+    assert.equal(await project.tokenSymbol(), _tokenSymbol)
   })
 
   it('accepts contributions', async () => {
@@ -207,6 +217,28 @@ contract('Project', accounts => {
 
     try {
       await project.getRefund({ from: account23 })
+      assert.fail()
+    } catch (err) {
+      assert.ok(/revert/.test(err.message))
+    }
+  })
+
+  xit('allows contributors to get STP tokens after time is up and goal is reached', async () => {
+    const account24 = accounts[24]
+    const account25 = accounts[25]
+
+    await project.contribute({ from: account24, value: etherToWei(50) })
+    await project.contribute({ from: account25, value: etherToWei(50) })
+
+    const contributionBalanceAccount24 = await contributionsAddressInEther(
+      account24
+    )
+    assert.equal(contributionBalanceAccount21, 50)
+
+    await increaseTime(DAY * 5)
+
+    try {
+      await project.getRefund({ from: account21 })
       assert.fail()
     } catch (err) {
       assert.ok(/revert/.test(err.message))

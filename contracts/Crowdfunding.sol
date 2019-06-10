@@ -6,6 +6,7 @@ pragma solidity >=0.4.21 <0.6.0;
 // import 'https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/math/SafeMath.sol';
 
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "./TokenSTP.sol";
 import "./Project.sol";
 
 
@@ -19,6 +20,7 @@ contract Crowdfunding {
     /** STATE VARIABLES */
 
     Project[] private projects; // List of existing projects
+    address tokenSTPAddress;
 
     /** EVENTS */
 
@@ -34,6 +36,10 @@ contract Crowdfunding {
 
     /** BODY */
 
+    constructor (address _tokenSTPAddress) public {
+        tokenSTPAddress = _tokenSTPAddress;
+    }
+
     /** @dev Function to start a new project.
       * @param _title Title of the project to be created
       * @param _description Brief description about the project
@@ -48,7 +54,14 @@ contract Crowdfunding {
     )
         public
     {
-        Project newProject = new Project(msg.sender, _title, _description, _duration, _amountToRaise);
+        Project newProject = new Project(
+            msg.sender, 
+            _title, 
+            _description, 
+            _duration, 
+            _amountToRaise, 
+            tokenSTPAddress
+        );
         projects.push(newProject);
         emit ProjectStarted (
             address(newProject),
