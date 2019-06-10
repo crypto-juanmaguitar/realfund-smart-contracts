@@ -2,11 +2,15 @@
 
 const TokenSTP = artifacts.require('TokenSTP.sol')
 
+const NAME = 'RealFund Token Project'
+const SYMBOL = 'STP'
+const DECIMALS = 18
+
 contract('TokenProjectRealFund', accounts => {
   let token
 
   beforeEach(async () => {
-    token = await TokenSTP.new()
+    token = await TokenSTP.new(NAME, SYMBOL, DECIMALS)
   })
 
   it('should start with a totalSupply of 0', async () => {
