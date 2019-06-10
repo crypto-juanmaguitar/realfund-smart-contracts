@@ -2,8 +2,6 @@ pragma solidity >=0.4.21 <0.6.0;
 
 import "./TokenSTP.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
-import "openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
-import "openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol";
 
 
 /// @title Crowdfunding
@@ -155,8 +153,8 @@ contract Project {
         uint tokensToDistribute = contributions[targetTokens];
         require(tokensToDistribute > 0, "there SHOULD BE some amount of tokens to distribute to this sender");
 
-        ERC20Mintable _mintableTokenSTP = ERC20Mintable(tokenAddress);
-        _mintableTokenSTP.mint(targetTokens, tokensToDistribute);
+        TokenSTP _tokenSTP = TokenSTP(tokenAddress);
+        _tokenSTP.mint(targetTokens, tokensToDistribute);
     }
 
     function isFinished() public view returns (bool) {
@@ -168,8 +166,8 @@ contract Project {
     }
 
     function tokenSymbol() public view returns (string memory) {
-        ERC20Detailed _detailedTokenSTP = ERC20Detailed(tokenAddress);
-        return _detailedTokenSTP.symbol();
+        TokenSTP _tokenSTP = TokenSTP(tokenAddress);
+        return _tokenSTP.symbol();
     }
 
 }

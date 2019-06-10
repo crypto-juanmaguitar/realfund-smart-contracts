@@ -37,5 +37,4 @@ contract('TokenProjectRealFund', accounts => {
     const totalSupply = await token.totalSupply()
     assert.equal(totalSupply.toNumber(), 100)
   })
-
 })
