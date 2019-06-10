@@ -21,6 +21,7 @@ contract Crowdfunding {
 
     Project[] private projects; // List of existing projects
     address tokenSTPAddress;
+    uint256 rate;
 
     /** EVENTS */
 
@@ -36,8 +37,9 @@ contract Crowdfunding {
 
     /** BODY */
 
-    constructor (address _tokenSTPAddress) public {
+    constructor (address _tokenSTPAddress, uint256 _rate) public {
         tokenSTPAddress = _tokenSTPAddress;
+        rate = _rate;
     }
 
     /** @dev Function to start a new project.
@@ -60,7 +62,8 @@ contract Crowdfunding {
             _description, 
             _duration, 
             _amountToRaise, 
-            tokenSTPAddress
+            tokenSTPAddress,
+            rate
         );
         projects.push(newProject);
         emit ProjectStarted (

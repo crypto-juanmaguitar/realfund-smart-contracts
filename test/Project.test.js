@@ -11,10 +11,12 @@ contract('Project', accounts => {
   let project, tokenInstance
 
   const creatorAccount = accounts[0]
+
   const _title = 'test project title'
   const _description = 'test project description'
   const _duration = DAY * 4
   const _goal = 100
+  const _rate = web3.utils.toBN(web3.utils.toWei('1', 'ether'))
 
   let contributionsAddressInEther
 
@@ -27,7 +29,8 @@ contract('Project', accounts => {
       _description,
       _duration,
       etherToWei(_goal),
-      tokenInstance.address
+      tokenInstance.address,
+      _rate
     )
 
     contributionsAddressInEther = async address => {
@@ -223,7 +226,7 @@ contract('Project', accounts => {
     }
   })
 
-  xit('allows contributors to get STP tokens after time is up and goal is reached', async () => {
+  it('allows contributors to get STP tokens after time is up and goal is reached', async () => {
     const account24 = accounts[24]
     const account25 = accounts[25]
 
@@ -233,15 +236,13 @@ contract('Project', accounts => {
     const contributionBalanceAccount24 = await contributionsAddressInEther(
       account24
     )
-    assert.equal(contributionBalanceAccount21, 50)
+    assert.equal(contributionBalanceAccount24, 50)
 
     await increaseTime(DAY * 5)
+    
+    await project.getTokens(account24, { from: creatorAccount })
 
-    try {
-      await project.getRefund({ from: account21 })
-      assert.fail()
-    } catch (err) {
-      assert.ok(/revert/.test(err.message))
-    }
+    const balanceTokenSTPAccount24 = await tokenInstance.balanceOf(account24)
+    assert.equal(balanceTokenSTPAccount24, 50)
   })
 })

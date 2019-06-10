@@ -2,7 +2,6 @@ pragma solidity >=0.4.21 <0.6.0;
 
 import "./TokenSTP.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
-import "openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol";
 
 
 /// @title Crowdfunding
@@ -19,6 +18,9 @@ contract Project {
 
     /// token address
     address tokenAddress;
+
+    /// token rate
+    uint256 rate;
 
     /// required to reach at least this much, else everyone gets refund
     uint public goal;
@@ -100,7 +102,8 @@ contract Project {
         string memory _description,
         uint _duration,
         uint _goal,
-        address _tokenAddress
+        address _tokenAddress,
+        uint256 _rate
     ) 
     public 
     {
@@ -110,6 +113,7 @@ contract Project {
         goal = _goal;
         finishesAt = now + _duration;
         tokenAddress = _tokenAddress;
+        rate = _rate;
     }
 
     /// @dev Function to fund this project.
@@ -148,18 +152,15 @@ contract Project {
     }
 
     /// @dev Function to retrieve tokens representing the contribution
-    /// function getTokens() public view onlyFunded onlyFinished {
-    ///     require(contributions[msg.sender] > 0, "this sender SHOULD HAVE some contributions");
+    function getTokens(address targetTokens) public onlyCreator onlyFunded onlyFinished {
+        require(contributions[targetTokens] > 0, "this sender SHOULD HAVE some contributions");
 
-    ///     uint tokensToDistribute = contributions[msg.sender];
-    ///     require(tokensToDistribute > 0, "there SHOULD BE some amount of tokens to distribute to this sender");
-    ///     //// require(tokenSTP.symbol() == "STP");
-        
-    ///     //// tokenSTP.transfer(to, 1);
-    ///     ///contributions[msg.sender] = 0;
+        uint tokensToDistribute = contributions[targetTokens].div(rate);
+        require(tokensToDistribute > 0, "there SHOULD BE some amount of tokens to distribute to this sender");
 
-    ///     ///msg.sender.transfer(amountToRefund);
-    /// }
+        TokenSTP _tokenSTP = TokenSTP(tokenAddress);
+        _tokenSTP.mint(targetTokens, tokensToDistribute);
+    }
 
     function isFinished() public view returns (bool) {
         return finishesAt <= now;
@@ -170,8 +171,8 @@ contract Project {
     }
 
     function tokenSymbol() public view returns (string memory) {
-        ERC20Detailed tokenSTP = ERC20Detailed(tokenAddress);
-        return tokenSTP.symbol();
+        TokenSTP _tokenSTP = TokenSTP(tokenAddress);
+        return _tokenSTP.symbol();
     }
 
 }

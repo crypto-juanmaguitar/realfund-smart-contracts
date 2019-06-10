@@ -12,10 +12,11 @@ contract('Crowdfunding', accounts => {
   const DESCRIPTION = 'test project description'
   const DURATION = 4 * DAY
   const GOAL = 100
+  const RATE = web3.utils.toBN(web3.utils.toWei('1', 'ether'))
 
   beforeEach(async () => {
     tokenInstance = await TokenSTP.deployed()
-    crowdfunding = await Crowdfunding.new(tokenInstance.address)
+    crowdfunding = await Crowdfunding.new(tokenInstance.address, RATE)
   })
 
   afterEach(async () => {
