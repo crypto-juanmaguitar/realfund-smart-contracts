@@ -9,7 +9,7 @@ const HDWalletProvider = require('truffle-hdwallet-provider')
 
 const NETWORK_IDS = {
   // mainnet: 1,
-  ropsten: 2,
+  ropsten: 3,
   rinkeby: 4,
   kovan: 42
 }
@@ -56,6 +56,8 @@ for (const networkName in NETWORK_IDS) {
     network_id: NETWORK_IDS[networkName]
   }
 }
+
+console.log(module.exports)
 
 // const HDWalletProvider = require('truffle-hdwallet-provider')
 

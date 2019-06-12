@@ -32,6 +32,7 @@
     "clean:contracts": "rimraf build/contracts",
     "build": "npm run clean:contracts && truffle compile",
     "migrate:kovan": "truffle migrate --network kovan",
+    "migrate:ropsten": "truffle migrate --network ropsten",
     "migrate:test": "truffle migrate --network test",
     "upgrade": "npm version patch",
     "upgrade:push": "git push && git push --tags",
