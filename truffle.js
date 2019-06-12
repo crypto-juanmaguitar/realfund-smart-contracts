@@ -57,8 +57,6 @@ for (const networkName in NETWORK_IDS) {
   }
 }
 
-console.log(module.exports)
-
 // const HDWalletProvider = require('truffle-hdwallet-provider')
 
 // const rinkebyWallet =
