@@ -264,21 +264,14 @@ contract('Project', accounts => {
     
     const closedAtTime = await project.closedAt()
     const finishesAt = await project.finishesAt()
-    const openedAt = await project.finishesAt()
+    const openedAt = await project.openedAt()
 
     const closedAtTimeTimestamp = closedAtTime.toString()
     const finishesAtTimestamp = finishesAt.toString()
     const openedAtTimestamp = openedAt.toString()
 
-    const closedAtTimeFormat = moment.unix(closedAtTime).format('DD/MM/YYYY')
-    const finishesAtFormat = moment.unix(finishesAt).format('DD/MM/YYYY')
-    const openedAtFormat = moment.unix(openedAt).format('DD/MM/YYYY')
-    
-    
-    // console.log({closedAtTime, finishesAt, openedAt})
-    console.log({closedAtTimeTimestamp, finishesAtTimestamp, openedAtTimestamp})
-    console.log({closedAtTimeFormat, finishesAtFormat, openedAtFormat})
-    assert.isTrue(true)
+    assert.isTrue(finishesAtTimestamp > openedAtTimestamp)
+    assert.isTrue(closedAtTimeTimestamp >= openedAtTimestamp)
 
   })
 
