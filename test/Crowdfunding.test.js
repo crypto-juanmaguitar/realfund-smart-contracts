@@ -2,7 +2,7 @@
 const Crowdfunding = artifacts.require('Crowdfunding')
 const TokenSTP = artifacts.require('TokenSTP')
 
-const DAY = 3600 * 24 * 1000
+const DAY = 3600 * 24
 
 contract('Crowdfunding', accounts => {
   let crowdfunding, tokenInstance

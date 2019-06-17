@@ -7,7 +7,7 @@ import { etherToWei, weiToEher, balanceAddressInEther } from './helpers/wei'
 const Project = artifacts.require('Project')
 const TokenSTP = artifacts.require('TokenSTP')
 
-const DAY = 3600 * 24 * 1000
+const DAY = 3600 * 24
 
 contract('Project', accounts => {
   let project, tokenInstance
@@ -265,12 +265,19 @@ contract('Project', accounts => {
     const closedAtTime = await project.closedAt()
     const finishesAt = await project.finishesAt()
     const openedAt = await project.finishesAt()
+
     const closedAtTimeTimestamp = closedAtTime.toString()
     const finishesAtTimestamp = finishesAt.toString()
     const openedAtTimestamp = openedAt.toString()
+
+    const closedAtTimeFormat = moment.unix(closedAtTime).format('DD/MM/YYYY')
+    const finishesAtFormat = moment.unix(finishesAt).format('DD/MM/YYYY')
+    const openedAtFormat = moment.unix(openedAt).format('DD/MM/YYYY')
     
-    console.log({closedAtTime, finishesAt, openedAt})
-console.log({closedAtTimeTimestamp, finishesAtTimestamp, openedAtTimestamp})
+    
+    // console.log({closedAtTime, finishesAt, openedAt})
+    console.log({closedAtTimeTimestamp, finishesAtTimestamp, openedAtTimestamp})
+    console.log({closedAtTimeFormat, finishesAtFormat, openedAtFormat})
     assert.isTrue(true)
 
   })
