@@ -1,4 +1,6 @@
 /* eslint-disable */
+import moment from 'moment'
+
 import { increaseTime } from './helpers/time'
 import { etherToWei, weiToEher, balanceAddressInEther } from './helpers/wei'
 
@@ -108,6 +110,25 @@ contract('Project', accounts => {
     const balanceAccount13 = await contributionsAddressInEther(account13)
     assert.equal(balanceAccount12, 40)
     assert.equal(balanceAccount13, 20)
+  })
+
+  it('keeps track of contributors addresses and num of contributors', async () => {
+    const account12 = accounts[12]
+    const account13 = accounts[13]
+
+    const balanceProjectBegin = await balanceAddressInEther(project.address)
+    assert.equal(balanceProjectBegin, 0)
+
+    await project.contribute({ from: account12, value: etherToWei(10) })
+    await project.contribute({ from: account13, value: etherToWei(10) })
+
+    const balanceProjectEnd = await balanceAddressInEther(project.address)
+    assert.equal(balanceProjectEnd, 20)
+
+    const contributors = await project.getContributors()
+
+    assert.equal(contributors.length, 2)
+    assert.isTrue(contributors.some( address => address === account12))
   })
 
   it('does not allow for donations when time is up', async () => {
@@ -224,6 +245,34 @@ contract('Project', accounts => {
     } catch (err) {
       assert.ok(/revert/.test(err.message))
     }
+  })
+
+  it('has available the closed time after time is up and goal is reached', async () => {
+
+    const account28 = accounts[28]
+    const account29 = accounts[29]
+
+    await project.contribute({ from: account28, value: etherToWei(50) })
+    await project.contribute({ from: account29, value: etherToWei(50) })
+
+    const contributionBalanceAccount28 = await contributionsAddressInEther(
+      account28
+    )
+    assert.equal(contributionBalanceAccount28, 50)
+
+    await increaseTime(DAY * 5)
+    
+    const closedAtTime = await project.closedAt()
+    const finishesAt = await project.finishesAt()
+    const openedAt = await project.finishesAt()
+    const closedAtTimeTimestamp = closedAtTime.toString()
+    const finishesAtTimestamp = finishesAt.toString()
+    const openedAtTimestamp = openedAt.toString()
+    
+    console.log({closedAtTime, finishesAt, openedAt})
+console.log({closedAtTimeTimestamp, finishesAtTimestamp, openedAtTimestamp})
+    assert.isTrue(true)
+
   })
 
   it('allows contributors to get STP tokens after time is up and goal is reached', async () => {

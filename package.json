@@ -17,7 +17,7 @@
   },
   "scripts": {
     "phoenix": "rm -rf node_modules && rm -rf package-lock.json && npm cache clean --force && npm install && rm -rf node_modules/**/.git",
-    "ganache": "ganache-cli -e 100 -p 9545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
+    "ganache": "ganache-cli -e 100 -p 9545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 50 > /dev/null &",
     "stop": "sudo kill `sudo lsof -t -i:9545`",
     "test": "npm run ganache sleep 5 && npm run lint && npm run solium && truffle test && npm run stop",
     "test:truffle": "truffle test",

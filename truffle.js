@@ -56,19 +56,3 @@ for (const networkName in NETWORK_IDS) {
     network_id: NETWORK_IDS[networkName]
   }
 }
-
-// const HDWalletProvider = require('truffle-hdwallet-provider')
-
-// const rinkebyWallet =
-//   'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'
-// const rinkebyProvider = new HDWalletProvider(
-//   rinkebyWallet,
-//   'https://rinkeby.infura.io/'
-// )
-
-// const ropstenWallet =
-//   'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'
-// const ropstenProvider = new HDWalletProvider(
-//   ropstenWallet,
-//   'https://ropsten.infura.io/'
-// )

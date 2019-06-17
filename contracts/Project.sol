@@ -29,6 +29,9 @@ contract Project {
     uint public closedAt;
 
     /// date when the funding should be completed or everyone gets refund
+    uint public openedAt;
+
+    /// date when the funding should be completed or everyone gets refund
     uint public finishesAt;
 
     /// title of the project
@@ -111,6 +114,7 @@ contract Project {
         title = _title;
         description = _description;
         goal = _goal;
+        openedAt = now;
         finishesAt = now + _duration;
         tokenAddress = _tokenAddress;
         rate = _rate;
