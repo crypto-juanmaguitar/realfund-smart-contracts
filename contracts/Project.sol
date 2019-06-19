@@ -134,8 +134,15 @@ contract Project {
     /** @dev Function to get all projects' contract addresses.
       * @return A list of all projects' contract addreses
       */
-    function getContributors() external view onlyCreator returns(address[] memory) {
+    function getContributors() external view returns(address[] memory) {
         return contributionsAddresses;
+    }
+
+    /** @dev Function to get all projects' contract addresses.
+      * @return A list of all projects' contract addreses
+      */
+    function getNumContributors() external view returns(uint) {
+        return contributionsAddresses.length;
     }
 
     /// @dev Function to give the received funds to project starter.

@@ -1,6 +1,4 @@
 /* eslint-disable */
-import moment from 'moment'
-
 import { increaseTime } from './helpers/time'
 import { etherToWei, weiToEher, balanceAddressInEther } from './helpers/wei'
 
@@ -112,7 +110,7 @@ contract('Project', accounts => {
     assert.equal(balanceAccount13, 20)
   })
 
-  it('keeps track of contributors addresses and num of contributors', async () => {
+  it('keeps track of contributors addresses', async () => {
     const account12 = accounts[12]
     const account13 = accounts[13]
 
@@ -129,6 +127,18 @@ contract('Project', accounts => {
 
     assert.equal(contributors.length, 2)
     assert.isTrue(contributors.some( address => address === account12))
+  })
+
+  it('keeps track of number of contributors', async () => {
+    const account12 = accounts[12]
+    const account13 = accounts[13]
+
+    await project.contribute({ from: account12, value: etherToWei(10) })
+    await project.contribute({ from: account13, value: etherToWei(10) })
+
+    const numContributors = await project.getNumContributors()
+
+    assert.equal(numContributors, 2)
   })
 
   it('does not allow for donations when time is up', async () => {
