@@ -138,10 +138,10 @@ contract Project {
         return contributionsAddresses;
     }
 
-    /** @dev Function to get all projects' contract addresses.
-      * @return A list of all projects' contract addreses
+    /** @dev Function to get the number of contributors
+      * @return The number of contributors
       */
-    function getNumContributors() external view returns(uint) {
+    function getNumContributors() external view returns(uint256) {
         return contributionsAddresses.length;
     }
 
