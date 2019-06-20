@@ -163,7 +163,7 @@ contract Project {
     }
 
     /// @dev Function to retrieve tokens representing the contribution
-    function getTokens() public onlyFunded onlyFinished {
+    function getTokens() public onlyFunded {
         require(contributions[msg.sender] > 0, "this sender SHOULD HAVE some contributions");
 
         uint tokensToDistribute = contributions[msg.sender].div(rate);
