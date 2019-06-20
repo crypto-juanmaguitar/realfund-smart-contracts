@@ -163,14 +163,16 @@ contract Project {
     }
 
     /// @dev Function to retrieve tokens representing the contribution
-    function getTokens(address targetTokens) public onlyCreator onlyFunded onlyFinished {
-        require(contributions[targetTokens] > 0, "this sender SHOULD HAVE some contributions");
+    function getTokens() public onlyFunded onlyFinished {
+        require(contributions[msg.sender] > 0, "this sender SHOULD HAVE some contributions");
 
-        uint tokensToDistribute = contributions[targetTokens].div(rate);
+        uint tokensToDistribute = contributions[msg.sender].div(rate);
         require(tokensToDistribute > 0, "there SHOULD BE some amount of tokens to distribute to this sender");
 
         TokenSTP _tokenSTP = TokenSTP(tokenAddress);
-        _tokenSTP.mint(targetTokens, tokensToDistribute);
+        _tokenSTP.mint(msg.sender, tokensToDistribute);
+        tokensDistribution[msg.sender] = tokensDistribution[msg.sender].add(tokensToDistribute);
+
     }
 
     function isFinished() public view returns (bool) {

@@ -37,6 +37,7 @@ contract('Project', accounts => {
       const balance = await project.contributions.call(address)
       return weiToEher(balance)
     }
+
   })
 
   afterEach(async () => {
@@ -299,10 +300,13 @@ contract('Project', accounts => {
 
     await increaseTime(DAY * 5)
     
-    await project.getTokens(account24)
+    await project.getTokens({ from: account24 })
 
     const balanceTokenSTPAccount24 = await tokenInstance.balanceOf(account24)
     assert.equal(balanceTokenSTPAccount24, 50)
+
+    const tokensSTPDistributedInProjectForAccount24 = await project.tokensDistribution.call(account24)
+    assert.equal(tokensSTPDistributedInProjectForAccount24.toString(), 50)
   })
 
   it('does not allow contributors to get STP tokens before time is up and goal is not reached', async () => {
@@ -315,7 +319,7 @@ contract('Project', accounts => {
     assert.equal(contributionBalanceAccount26, 50)
 
     try {
-      await project.getTokens( account26 )
+      await project.getTokens({ from: account26 })
       assert.fail()
     } catch (err) {
       assert.ok(/revert/.test(err.message))
