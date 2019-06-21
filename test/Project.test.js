@@ -16,7 +16,7 @@ contract('Project', accounts => {
   const _description = 'test project description'
   const _duration = DAY * 4
   const _goal = 100
-  const _rate = "1000000000000000000"
+  const _rate = 1
 
   let contributionsAddressInEther
 
@@ -303,10 +303,10 @@ contract('Project', accounts => {
     await project.getTokens({ from: account24 })
 
     const balanceTokenSTPAccount24 = await tokenInstance.balanceOf(account24)
-    assert.equal(balanceTokenSTPAccount24.toString(), 50)
+    assert.equal(weiToEher(balanceTokenSTPAccount24), 50)
 
     const tokensSTPDistributedInProjectForAccount24 = await project.tokensDistribution.call(account24)
-    assert.equal(tokensSTPDistributedInProjectForAccount24.toString(), 50)
+    assert.equal(weiToEher(tokensSTPDistributedInProjectForAccount24), 50)
   })
 
   it('does not allow contributors to get STP tokens before time is up and goal is not reached', async () => {
