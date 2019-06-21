@@ -169,6 +169,7 @@ contract Project {
         uint tokensToDistribute = contributions[msg.sender].div(rate);
         require(tokensToDistribute > 0, "there SHOULD BE some amount of tokens to distribute to this sender");
 
+        require(tokensDistribution[msg.sender] == 0, "there SHOULD NOT BE tokens distributed to this account");
         TokenSTP _tokenSTP = TokenSTP(tokenAddress);
         _tokenSTP.mint(msg.sender, tokensToDistribute);
         tokensDistribution[msg.sender] = tokensDistribution[msg.sender].add(tokensToDistribute);

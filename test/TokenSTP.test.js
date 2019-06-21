@@ -4,7 +4,7 @@ const TokenSTP = artifacts.require('TokenSTP.sol')
 
 const NAME = 'RealFund Token Project'
 const SYMBOL = 'STP'
-const DECIMALS = 18
+const DECIMALS = 4
 
 contract('TokenProjectRealFund', accounts => {
   let token
