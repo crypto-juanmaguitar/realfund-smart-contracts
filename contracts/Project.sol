@@ -147,6 +147,7 @@ contract Project {
 
     /// @dev Function to give the received funds to project starter.
     function withdrawFunds() public onlyCreator onlyFunded {
+        require(address(this).balance >= goal, "current balance should be higher than goal");
         creator.transfer(address(this).balance);
         emit CreatorPaid(creator);
     }
@@ -181,7 +182,7 @@ contract Project {
     }
 
     function isFunded() public view returns (bool) {
-        return address(this).balance >= goal;
+        return closedAt > 0;
     }
 
     function tokenSymbol() public view returns (string memory) {
