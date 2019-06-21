@@ -1,7 +1,7 @@
 {
   "name": "realfund-smart-contracts",
   "description": "Smart Contracts for RealFund",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "author": "JuanMa Garrido <juanma.garrido@gmail.com>",
   "license": "MIT",
   "main": "truffle.js",
