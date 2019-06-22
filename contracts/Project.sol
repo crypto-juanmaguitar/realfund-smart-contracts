@@ -11,7 +11,13 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 contract Project {
     using SafeMath for uint256;
 
+    uint256 adminPercent = 7;   // Percent of investement for RealFund
+    uint256 creatorPercent = 93;   // Percent of investement for RealFund
+
     /** STATE VARIABLES */
+
+    /// admin → RealFund
+    address payable public admin;
 
     /// project creator
     address payable public creator;
@@ -55,11 +61,16 @@ contract Project {
     /// Event that will be emitted whenever funding will be received
     event FundingReceived(address contributor, uint amount, uint currentTotal);
 
+    event PercentageCalculated(uint amountProject, uint amountCreator, uint amountAdmin);
+
     /// Event that will be emitted whenever goal is reached
     event ProjectFunded(uint closedAt, uint currentTotal);
 
     /// Event that will be emitted whenever the project starter has received the funds
-    event CreatorPaid(address recipient);
+    event CreatorPaid(address recipient, uint amount);
+    
+    /// Event that will be emitted whenever the project starter has received the funds
+    event AdminPaid(address recipient, uint amount);
 
 
     /** MODIFIERS */
@@ -106,7 +117,8 @@ contract Project {
         uint _duration,
         uint _goal,
         address _tokenAddress,
-        uint256 _rate
+        uint256 _rate,
+        address payable _admin
     ) 
     public 
     {
@@ -118,6 +130,7 @@ contract Project {
         finishesAt = now + _duration;
         tokenAddress = _tokenAddress;
         rate = _rate;
+        admin = _admin;
     }
 
     /// @dev Function to fund this project.
@@ -148,8 +161,32 @@ contract Project {
     /// @dev Function to give the received funds to project starter.
     function withdrawFunds() public onlyCreator onlyFunded {
         require(address(this).balance >= goal, "current balance should be higher than goal");
-        creator.transfer(address(this).balance);
-        emit CreatorPaid(creator);
+        
+        uint amountToWithdraw = calculatePercentage(address(this).balance, creatorPercent);
+        uint amountComissionAdmin = calculatePercentage(address(this).balance, adminPercent);
+
+
+        creator.transfer(amountToWithdraw);
+        admin.transfer(amountComissionAdmin);
+
+        emit PercentageCalculated(
+            address(this).balance, 
+            amountToWithdraw, 
+            amountComissionAdmin
+        );
+
+        emit CreatorPaid(creator, amountToWithdraw);
+        emit AdminPaid(admin, amountComissionAdmin);
+    }
+
+    /// @dev calculate percentage
+    function calculatePercentage(
+        uint256 theNumber,
+        uint256 percentage
+    )
+    public pure returns (uint128) 
+    {
+        return uint128(int256(theNumber) / int256(100) * int256(percentage));
     }
 
     /// @dev Function to retrieve donated amount when a project expires.
