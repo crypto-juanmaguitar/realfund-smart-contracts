@@ -20,6 +20,7 @@ contract Crowdfunding {
     /** STATE VARIABLES */
 
     Project[] private projects; // List of existing projects
+    address payable public admin;
     address tokenSTPAddress;
     uint256 rate;
 
@@ -38,6 +39,7 @@ contract Crowdfunding {
     /** BODY */
 
     constructor (address _tokenSTPAddress, uint256 _rate) public {
+        admin = msg.sender;
         tokenSTPAddress = _tokenSTPAddress;
         rate = _rate;
     }
@@ -63,7 +65,8 @@ contract Crowdfunding {
             _duration, 
             _amountToRaise, 
             tokenSTPAddress,
-            rate
+            rate,
+            admin
         );
         projects.push(newProject);
         emit ProjectStarted (

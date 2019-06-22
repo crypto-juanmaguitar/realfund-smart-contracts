@@ -11,6 +11,7 @@ contract('Project', accounts => {
   let project, tokenInstance
 
   const creatorAccount = accounts[0]
+  const adminAccount = accounts[1]
 
   const _title = 'test project title'
   const _description = 'test project description'
@@ -30,7 +31,8 @@ contract('Project', accounts => {
       _duration,
       etherToWei(_goal),
       tokenInstance.address,
-      _rate
+      _rate,
+      adminAccount
     )
 
     contributionsAddressInEther = async address => {
@@ -164,25 +166,30 @@ contract('Project', accounts => {
     const account17 = accounts[17]
 
     const initProjectBalance = await balanceAddressInEther(project.address)
-    assert.equal(initProjectBalance, 0)
+    assert.equal(initProjectBalance, 0,'Project Initial Balance should be 0')
 
     const initBalanceCreator = await balanceAddressInEther(creatorAccount)
+    const initBalanceAdmin = await balanceAddressInEther(adminAccount)
 
     await project.contribute({ from: account16, value: etherToWei(70) })
     await project.contribute({ from: account17, value: etherToWei(30) })
 
     const fundedProjectBalance = await balanceAddressInEther(project.address)
-    assert.equal(fundedProjectBalance, 100)
+    assert.equal(fundedProjectBalance, 100, 'Project Final Balance should be 100')
 
     await project.withdrawFunds()
 
     const finalBalanceCreator = await balanceAddressInEther(creatorAccount)
-    assert.isTrue(+finalBalanceCreator > +initBalanceCreator) // hard to be exact due to the gas usage
+    assert.isTrue(+finalBalanceCreator > +initBalanceCreator, 'Final Balance of Creator should be higher than Inicial Balance of Creator') // hard to be exact due to the gas usage
+
+    const finalBalanceAdmin = await balanceAddressInEther(adminAccount)
+    assert.isTrue(+finalBalanceAdmin > +initBalanceAdmin, 'Final Balance of Admin should be higher than Inicial Balance of Creator') // hard to be exact due to the gas usage
 
     const afterWithdrawProjectBalance = await balanceAddressInEther(
       project.address
-    )
-    assert.equal(afterWithdrawProjectBalance, 0)
+      )
+
+    assert.equal(afterWithdrawProjectBalance, 0, 'Final Balance of Project should be 0 after withdraw')
   })
 
   it('does not allow non-creators to withdraw project funds', async () => {
