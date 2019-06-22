@@ -161,7 +161,7 @@ contract('Project', accounts => {
     assert.equal(balanceProject, 10)
   })
 
-  it('allows creator to withdraw project funds when goal is reached', async () => {
+  it('allows creator to withdraw project funds when goal is reached and admin gets its comission', async () => {
     const account16 = accounts[16]
     const account17 = accounts[17]
 
